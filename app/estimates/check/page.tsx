@@ -6,6 +6,17 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/app/stores/authStore';
 import { useEffect } from 'react';
 
+interface EstimateItem {
+  category: string;
+  name: string;
+  specification: string;
+  unit: string;
+  quantity: number;
+  unitPrice: number;
+  amount: number;
+  supplier?: string;
+}
+
 interface EstimateData {
   fileName: string;
   projectName: string;
@@ -13,16 +24,7 @@ interface EstimateData {
   location: string;
   periodStart: string;
   periodEnd: string;
-  items: {
-    category: string;
-    name: string;
-    specification: string;
-    unit: string;
-    quantity: number;
-    unitPrice: number;
-    amount: number;
-    supplier?: string;
-  }[];
+  items: EstimateItem[];
   totalAmount: number;
 }
 

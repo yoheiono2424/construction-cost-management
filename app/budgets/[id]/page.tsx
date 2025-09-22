@@ -38,7 +38,7 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
     customer: '○○工業株式会社',
     period: '2025/02/01 〜 2025/06/30',
     contractAmount: 50000000,
-    status: 'pending_approval' as const,
+    status: 'pending_approval' as 'draft' | 'pending_approval' | 'approved' | 'rejected',
     createdBy: '山田太郎',
     createdAt: '2025/01/19',
     sections: {

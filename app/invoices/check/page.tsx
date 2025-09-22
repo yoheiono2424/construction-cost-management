@@ -6,6 +6,13 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/app/stores/authStore';
 import { useEffect } from 'react';
 
+interface InvoiceItem {
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  amount: number;
+}
+
 interface InvoiceData {
   id: string;
   fileName: string;
@@ -17,12 +24,7 @@ interface InvoiceData {
   amount: number;
   taxAmount: number;
   totalAmount: number;
-  items: {
-    description: string;
-    quantity: number;
-    unitPrice: number;
-    amount: number;
-  }[];
+  items: InvoiceItem[];
   project: string;
   status: 'pending' | 'confirmed';
 }
@@ -138,7 +140,7 @@ export default function InvoiceCheckPage() {
     handleNext();
   };
 
-  const updateFormData = (field: keyof InvoiceData, value: string | number) => {
+  const updateFormData = (field: keyof InvoiceData, value: string | number | InvoiceItem[]) => {
     if (formData) {
       setFormData({
         ...formData,

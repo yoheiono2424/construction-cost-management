@@ -291,7 +291,7 @@ export default function PaymentPage() {
                   key={payment.id}
                   className="hover:bg-gray-50 cursor-pointer"
                   onClick={(e) => {
-                    if ((e.target as HTMLElement).type !== 'checkbox') {
+                    if ((e.target as HTMLInputElement).type !== 'checkbox') {
                       router.push(`/payment/${payment.id}`);
                     }
                   }}
