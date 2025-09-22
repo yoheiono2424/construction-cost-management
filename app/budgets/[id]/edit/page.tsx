@@ -38,7 +38,7 @@ export default function BudgetEditPage({ params }: { params: Promise<{ id: strin
     periodStart: '2025-02-01',
     periodEnd: '2025-06-30',
     contractAmount: 50000000,
-    status: 'pending_approval' as const,
+    status: 'pending_approval' as 'draft' | 'pending_approval' | 'approved' | 'rejected',
   });
 
   // 各費目のデータ（既存データを読み込む想定）
