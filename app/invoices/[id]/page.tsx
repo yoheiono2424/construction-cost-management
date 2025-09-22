@@ -136,8 +136,10 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
             <h2 className="text-lg font-semibold text-gray-900 mb-4">請求書画像</h2>
             <div className="border-2 border-gray-200 rounded-lg p-4 bg-gray-50 min-h-[600px] flex items-center justify-center">
               {invoice.imageUrl ? (
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={invoice.imageUrl} alt="請求書" className="max-w-full h-auto" />
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={invoice.imageUrl} alt="請求書" className="max-w-full h-auto" />
+                </>
               ) : (
                 <p className="text-gray-500">画像プレビューエリア</p>
               )}
