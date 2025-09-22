@@ -23,7 +23,7 @@ interface BudgetListItem {
 
 export default function BudgetsPage() {
   const router = useRouter();
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     if (!isAuthenticated) {

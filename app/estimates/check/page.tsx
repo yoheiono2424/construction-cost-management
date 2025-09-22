@@ -55,14 +55,14 @@ export default function EstimateCheckPage() {
     }
   }, [isAuthenticated, router]);
 
-  const updateField = (field: keyof EstimateData, value: any) => {
+  const updateField = (field: keyof EstimateData, value: string | number | EstimateItem[]) => {
     setEstimateData({
       ...estimateData,
       [field]: value
     });
   };
 
-  const updateItem = (index: number, field: string, value: any) => {
+  const updateItem = (index: number, field: string, value: string | number) => {
     const newItems = [...estimateData.items];
     newItems[index] = {
       ...newItems[index],

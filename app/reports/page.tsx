@@ -135,12 +135,22 @@ export default function ReportsPage() {
 
 
   // カスタムツールチップ
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  interface TooltipPayload {
+    color: string;
+    name: string;
+    value: number;
+  }
+
+  const CustomTooltip = ({ active, payload, label }: {
+    active?: boolean;
+    payload?: TooltipPayload[];
+    label?: string
+  }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-3 border border-gray-200 rounded shadow-lg">
           <p className="font-semibold">{label}</p>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry: TooltipPayload, index: number) => (
             <p key={index} style={{ color: entry.color }}>
               {entry.name}: ¥{entry.value.toLocaleString()}
             </p>

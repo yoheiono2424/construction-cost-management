@@ -138,7 +138,7 @@ export default function InvoiceCheckPage() {
     handleNext();
   };
 
-  const updateFormData = (field: keyof InvoiceData, value: any) => {
+  const updateFormData = (field: keyof InvoiceData, value: string | number) => {
     if (formData) {
       setFormData({
         ...formData,

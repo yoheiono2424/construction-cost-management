@@ -3,7 +3,6 @@
 import { useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Layout from '@/app/components/Layout';
-import { useAuthStore } from '@/app/stores/authStore';
 
 interface PaymentDetail {
   id: string;
@@ -36,7 +35,6 @@ interface PaymentDetail {
 export default function PaymentDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const router = useRouter();
-  const { user } = useAuthStore();
 
   const [payment] = useState<PaymentDetail>({
     id: resolvedParams.id,

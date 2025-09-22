@@ -62,7 +62,7 @@ export default function NewBudgetPage() {
     section: 'materials' | 'labor' | 'outsourcing' | 'expenses',
     id: string,
     field: keyof BudgetItem,
-    value: any
+    value: string | number
   ) => {
     const updateFunction = (items: BudgetItem[]) =>
       items.map(item => {

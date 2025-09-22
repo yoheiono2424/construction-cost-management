@@ -12,7 +12,7 @@ export default function InvoiceUploadPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({});
-  const [uploadHistory, setUploadHistory] = useState([
+  const [uploadHistory] = useState([
     { id: 1, fileName: '請求書_A建設_2025年1月.pdf', uploadDate: '2025/01/15 10:30', status: 'completed', fileCount: 1 },
     { id: 2, fileName: '請求書_B工業_2025年1月.pdf', uploadDate: '2025/01/14 15:20', status: 'completed', fileCount: 1 },
     { id: 3, fileName: '複数ファイル', uploadDate: '2025/01/13 09:45', status: 'processing', fileCount: 5 },
@@ -42,10 +42,6 @@ export default function InvoiceUploadPage() {
     processFiles(files);
   }, []);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    processFiles(files);
-  };
 
   const processFiles = (files: File[]) => {
     const validFiles = files.filter(file =>
