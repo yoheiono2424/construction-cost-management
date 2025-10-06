@@ -15,17 +15,24 @@ interface Invoice {
   amount: number;
   invoiceDate: string;
   dueDate: string;
-  status: 'unconfirmed' | 'confirmed' | 'paid' | 'overdue';
+  status: 'pending' | 'exported' | 'overdue';
   ocrStatus: 'pending' | 'completed' | 'error';
 }
 
 export default function InvoicesPage() {
   const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const [viewMode, setViewMode] = useState<'month' | 'all'>('month');
   const [selectedMonth, setSelectedMonth] = useState('2025-01');
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+
+  // 権限チェック：メンバーはアクセス不可
+  useEffect(() => {
+    if (!user || user.role === 'メンバー') {
+      router.push('/projects');
+    }
+  }, [user, router]);
 
   const [invoices] = useState<Invoice[]>([
     {
@@ -36,7 +43,7 @@ export default function InvoicesPage() {
       amount: 1650000,
       invoiceDate: '2025/01/15',
       dueDate: '2025/02/15',
-      status: 'confirmed',
+      status: 'pending',
       ocrStatus: 'completed'
     },
     {
@@ -47,7 +54,7 @@ export default function InvoicesPage() {
       amount: 880000,
       invoiceDate: '2025/01/14',
       dueDate: '2025/02/14',
-      status: 'paid',
+      status: 'exported',
       ocrStatus: 'completed'
     },
     {
@@ -58,7 +65,7 @@ export default function InvoicesPage() {
       amount: 2200000,
       invoiceDate: '2025/01/10',
       dueDate: '2025/02/10',
-      status: 'confirmed',
+      status: 'pending',
       ocrStatus: 'completed'
     },
     {
@@ -69,7 +76,7 @@ export default function InvoicesPage() {
       amount: 550000,
       invoiceDate: '2025/01/08',
       dueDate: '2025/02/08',
-      status: 'unconfirmed',
+      status: 'pending',
       ocrStatus: 'pending'
     },
     {
@@ -104,12 +111,10 @@ export default function InvoicesPage() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'unconfirmed':
-        return <span className="px-2 py-1 text-xs bg-gray-100 text-gray-800 rounded">未確認</span>;
-      case 'confirmed':
-        return <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">確認済み</span>;
-      case 'paid':
-        return <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">支払済み</span>;
+      case 'pending':
+        return <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded">未処理</span>;
+      case 'exported':
+        return <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">CSV出力済</span>;
       case 'overdue':
         return <span className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded">期限超過</span>;
       default:
@@ -149,12 +154,6 @@ export default function InvoicesPage() {
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
               アップロード
-            </Link>
-            <Link
-              href="/invoices/check"
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-            >
-              確認・修正
             </Link>
           </div>
         </div>

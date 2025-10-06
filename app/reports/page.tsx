@@ -36,8 +36,15 @@ interface MonthlyTrendData {
 
 export default function ReportsPage() {
   const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const [selectedYear, setSelectedYear] = useState(2025);
+
+  // 権限チェック：メンバーはアクセス不可
+  useEffect(() => {
+    if (!user || user.role === 'メンバー') {
+      router.push('/projects');
+    }
+  }, [user, router]);
   const [selectedMonth, setSelectedMonth] = useState(1);
 
   // ダミーデータ：月次トレンドデータ（過去12ヶ月）

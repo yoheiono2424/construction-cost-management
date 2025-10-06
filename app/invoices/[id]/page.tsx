@@ -12,7 +12,7 @@ interface InvoiceDetail {
   supplier: string;
   projectName: string;
   projectId: string;
-  status: 'unconfirmed' | 'confirmed' | 'approved' | 'paid';
+  status: 'pending' | 'exported' | 'overdue';
   imageUrl?: string;
   items: {
     id: string;
@@ -44,7 +44,7 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
     supplier: '株式会社A建設',
     projectName: 'B工場増築工事',
     projectId: '2',
-    status: 'confirmed',
+    status: 'pending',
     imageUrl: '/invoice-sample.jpg',
     items: [
       {
@@ -82,14 +82,12 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'unconfirmed':
-        return <span className="px-3 py-1 text-sm bg-gray-100 text-gray-800 rounded">未確認</span>;
-      case 'confirmed':
-        return <span className="px-3 py-1 text-sm bg-blue-100 text-blue-800 rounded">確認済み</span>;
-      case 'approved':
-        return <span className="px-3 py-1 text-sm bg-yellow-100 text-yellow-800 rounded">承認済み</span>;
-      case 'paid':
-        return <span className="px-3 py-1 text-sm bg-green-100 text-green-800 rounded">支払済み</span>;
+      case 'pending':
+        return <span className="px-3 py-1 text-sm bg-yellow-100 text-yellow-800 rounded">未処理</span>;
+      case 'exported':
+        return <span className="px-3 py-1 text-sm bg-blue-100 text-blue-800 rounded">CSV出力済</span>;
+      case 'overdue':
+        return <span className="px-3 py-1 text-sm bg-red-100 text-red-800 rounded">期限超過</span>;
       default:
         return null;
     }
@@ -116,7 +114,7 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
             </div>
           </div>
           <div className="flex space-x-2">
-            {(invoice.status === 'unconfirmed' || invoice.status === 'confirmed') && (
+            {invoice.status === 'pending' && (
               <button
                 onClick={handleEdit}
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"

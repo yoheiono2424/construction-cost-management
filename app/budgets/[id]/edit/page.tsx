@@ -400,7 +400,7 @@ export default function BudgetEditPage({ params }: { params: Promise<{ id: strin
   // 権限チェック
   const canEdit = projectInfo.status === 'draft' ||
                   projectInfo.status === 'pending_approval' ||
-                  (user?.role === 'admin' && projectInfo.status === 'approved');
+                  (['社長', '常務', '管理部長'].includes(user?.role || '') && projectInfo.status === 'approved');
 
   if (!canEdit) {
     return (

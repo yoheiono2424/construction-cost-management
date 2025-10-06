@@ -17,14 +17,7 @@ interface PaymentDetail {
   totalAmount: number;
   site: string;
   dueDate: string;
-  status: 'pending' | 'exported' | 'paid';
-  bankInfo: {
-    bankName: string;
-    branchName: string;
-    accountType: string;
-    accountNumber: string;
-    accountHolder: string;
-  };
+  status: 'pending' | 'exported' | 'overdue';
   paymentHistory: {
     date: string;
     action: string;
@@ -59,13 +52,6 @@ export default function PaymentDetailPage({ params }: { params: Promise<{ id: st
     site: 'B工場増築工事',
     dueDate: '2025/02/15',
     status: 'pending',
-    bankInfo: {
-      bankName: 'みずほ銀行',
-      branchName: '東京営業部',
-      accountType: '普通',
-      accountNumber: '1234567',
-      accountHolder: 'カブシキガイシャエーケンセツ'
-    },
     paymentHistory: [
       {
         date: '2025/01/20',
@@ -86,8 +72,8 @@ export default function PaymentDetailPage({ params }: { params: Promise<{ id: st
         return <span className="px-3 py-1 text-sm bg-yellow-100 text-yellow-800 rounded">未処理</span>;
       case 'exported':
         return <span className="px-3 py-1 text-sm bg-blue-100 text-blue-800 rounded">CSV出力済</span>;
-      case 'paid':
-        return <span className="px-3 py-1 text-sm bg-green-100 text-green-800 rounded">支払済み</span>;
+      case 'overdue':
+        return <span className="px-3 py-1 text-sm bg-red-100 text-red-800 rounded">期限超過</span>;
       default:
         return null;
     }
@@ -95,14 +81,6 @@ export default function PaymentDetailPage({ params }: { params: Promise<{ id: st
 
   const handleExportCSV = () => {
     alert('CSV形式でエクスポートしました');
-  };
-
-  const handleExportBank = () => {
-    alert('全銀フォーマットで出力しました');
-  };
-
-  const handleMarkAsPaid = () => {
-    alert('支払済みとして記録しました');
   };
 
   return (
@@ -123,35 +101,19 @@ export default function PaymentDetailPage({ params }: { params: Promise<{ id: st
           </div>
           <div className="flex space-x-2">
             {payment.status === 'pending' && (
-              <>
-                <button
-                  onClick={handleExportCSV}
-                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-                >
-                  CSVエクスポート
-                </button>
-                <button
-                  onClick={handleExportBank}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                >
-                  振込データ作成
-                </button>
-              </>
-            )}
-            {payment.status === 'exported' && (
               <button
-                onClick={handleMarkAsPaid}
+                onClick={handleExportCSV}
                 className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
               >
-                支払済みにする
+                CSVエクスポート
               </button>
             )}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* 左側：支払情報 */}
-          <div className="lg:col-span-2 space-y-6">
+        <div className="grid grid-cols-1 gap-6">
+          {/* 支払情報 */}
+          <div className="space-y-6">
             {/* 基本情報 */}
             <div className="bg-white rounded-lg shadow p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">支払情報</h2>
@@ -240,90 +202,6 @@ export default function PaymentDetailPage({ params }: { params: Promise<{ id: st
                   </div>
                 ))}
               </div>
-            </div>
-          </div>
-
-          {/* 右側：銀行情報 */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">振込先情報</h2>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-sm text-gray-600">銀行名</p>
-                  <p className="font-medium">{payment.bankInfo.bankName}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">支店名</p>
-                  <p className="font-medium">{payment.bankInfo.branchName}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">口座種別</p>
-                  <p className="font-medium">{payment.bankInfo.accountType}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">口座番号</p>
-                  <p className="font-medium">{payment.bankInfo.accountNumber}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">口座名義</p>
-                  <p className="font-medium text-sm">{payment.bankInfo.accountHolder}</p>
-                </div>
-              </div>
-
-              <div className="mt-6 p-3 bg-blue-50 rounded-md">
-                <p className="text-xs text-blue-800">
-                  <strong>振込時の注意:</strong><br />
-                  口座名義はカタカナで入力してください。
-                </p>
-              </div>
-            </div>
-
-            {/* 支払方法 */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">支払方法</h2>
-              <div className="space-y-2">
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="bank"
-                    defaultChecked
-                    className="mr-2"
-                  />
-                  <span className="text-sm">銀行振込</span>
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="check"
-                    className="mr-2"
-                  />
-                  <span className="text-sm">小切手</span>
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="cash"
-                    className="mr-2"
-                  />
-                  <span className="text-sm">現金</span>
-                </label>
-              </div>
-            </div>
-
-            {/* メモ */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">メモ</h2>
-              <textarea
-                className="w-full p-2 border border-gray-300 rounded-md text-sm"
-                rows={4}
-                placeholder="支払に関するメモを入力..."
-              />
-              <button className="mt-2 px-3 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700">
-                保存
-              </button>
             </div>
           </div>
         </div>

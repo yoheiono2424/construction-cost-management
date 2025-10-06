@@ -12,11 +12,6 @@ export default function InvoiceUploadPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({});
-  const [uploadHistory] = useState([
-    { id: 1, fileName: '請求書_A建設_2025年1月.pdf', uploadDate: '2025/01/15 10:30', status: 'completed', fileCount: 1 },
-    { id: 2, fileName: '請求書_B工業_2025年1月.pdf', uploadDate: '2025/01/14 15:20', status: 'completed', fileCount: 1 },
-    { id: 3, fileName: '複数ファイル', uploadDate: '2025/01/13 09:45', status: 'processing', fileCount: 5 },
-  ]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -70,19 +65,6 @@ export default function InvoiceUploadPage() {
 
   const removeFile = (index: number) => {
     setUploadedFiles(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">完了</span>;
-      case 'processing':
-        return <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded">処理中</span>;
-      case 'error':
-        return <span className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded">エラー</span>;
-      default:
-        return null;
-    }
   };
 
   if (!isAuthenticated) {
@@ -176,66 +158,6 @@ export default function InvoiceUploadPage() {
               </div>
             </div>
           )}
-        </div>
-
-{/* アップロード履歴 */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">アップロード履歴</h2>
-          </div>
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  ファイル名
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  アップロード日時
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  ファイル数
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  ステータス
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  操作
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {uploadHistory.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{item.fileName}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{item.uploadDate}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{item.fileCount}件</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {getStatusBadge(item.status)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    {item.status === 'completed' ? (
-                      <button
-                        onClick={() => router.push('/invoices/check')}
-                        className="text-blue-600 hover:text-blue-900"
-                      >
-                        確認
-                      </button>
-                    ) : (
-                      <button className="text-gray-400 cursor-not-allowed" disabled>
-                        処理中
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       </div>
     </Layout>

@@ -13,22 +13,22 @@ interface PaymentItem {
   totalAmount: number;
   site: string;
   dueDate: string;
-  status: 'pending' | 'exported' | 'paid';
-  bankInfo: {
-    bankName: string;
-    branchName: string;
-    accountType: string;
-    accountNumber: string;
-    accountHolder: string;
-  };
+  status: 'pending' | 'exported' | 'overdue';
 }
 
 export default function PaymentPage() {
   const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const [selectedMonth, setSelectedMonth] = useState('2025-02');
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [showExportModal, setShowExportModal] = useState(false);
+
+  // 権限チェック：メンバーはアクセス不可
+  useEffect(() => {
+    if (!user || user.role === 'メンバー') {
+      router.push('/projects');
+    }
+  }, [user, router]);
 
   const [payments] = useState<PaymentItem[]>([
     {
@@ -39,13 +39,6 @@ export default function PaymentPage() {
       site: 'B工場増築工事',
       dueDate: '2025/02/15',
       status: 'pending',
-      bankInfo: {
-        bankName: 'みずほ銀行',
-        branchName: '東京営業部',
-        accountType: '普通',
-        accountNumber: '1234567',
-        accountHolder: 'カブシキガイシャエーケンセツ'
-      }
     },
     {
       id: '2',
@@ -55,13 +48,6 @@ export default function PaymentPage() {
       site: 'C店舗新装工事',
       dueDate: '2025/02/14',
       status: 'exported',
-      bankInfo: {
-        bankName: '三菱UFJ銀行',
-        branchName: '新宿支店',
-        accountType: '普通',
-        accountNumber: '7654321',
-        accountHolder: 'ビーコウギョウカブシキガイシャ'
-      }
     },
     {
       id: '3',
@@ -71,13 +57,6 @@ export default function PaymentPage() {
       site: 'A工事現場改修工事',
       dueDate: '2025/02/10',
       status: 'pending',
-      bankInfo: {
-        bankName: '三井住友銀行',
-        branchName: '渋谷支店',
-        accountType: '当座',
-        accountNumber: '2468135',
-        accountHolder: 'シーショウジカブシキガイシャ'
-      }
     },
     {
       id: '4',
@@ -86,14 +65,7 @@ export default function PaymentPage() {
       totalAmount: 550000,
       site: 'D住宅リフォーム',
       dueDate: '2025/02/08',
-      status: 'paid',
-      bankInfo: {
-        bankName: 'りそな銀行',
-        branchName: '池袋支店',
-        accountType: '普通',
-        accountNumber: '9876543',
-        accountHolder: 'ディーケンザイカブシキガイシャ'
-      }
+      status: 'exported',
     },
     {
       id: '5',
@@ -103,13 +75,6 @@ export default function PaymentPage() {
       site: 'E施設改修工事',
       dueDate: '2025/01/31',
       status: 'pending',
-      bankInfo: {
-        bankName: 'みずほ銀行',
-        branchName: '品川支店',
-        accountType: '普通',
-        accountNumber: '5555555',
-        accountHolder: 'イーセツビカブシキガイシャ'
-      }
     },
   ]);
 
@@ -143,20 +108,14 @@ export default function PaymentPage() {
     // 実際はステータスを'exported'に変更
   };
 
-  const handleExportBankData = () => {
-    // 銀行振込データ出力処理
-    console.log('Exporting bank data for items:', selectedItems);
-    alert('全銀フォーマットでデータを出力しました');
-  };
-
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'pending':
         return <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded">未処理</span>;
       case 'exported':
         return <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">CSV出力済</span>;
-      case 'paid':
-        return <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">支払済み</span>;
+      case 'overdue':
+        return <span className="px-2 py-1 text-xs bg-red-100 text-red-800 rounded">期限超過</span>;
       default:
         return null;
     }
@@ -164,7 +123,7 @@ export default function PaymentPage() {
 
   const totalAmount = payments.reduce((sum, payment) => sum + payment.totalAmount, 0);
   const pendingAmount = payments.filter(p => p.status === 'pending').reduce((sum, p) => sum + p.totalAmount, 0);
-  const paidAmount = payments.filter(p => p.status === 'paid').reduce((sum, p) => sum + p.totalAmount, 0);
+  const exportedAmount = payments.filter(p => p.status === 'exported').reduce((sum, p) => sum + p.totalAmount, 0);
 
   if (!isAuthenticated) {
     return null;
@@ -179,20 +138,20 @@ export default function PaymentPage() {
         </div>
 
         {/* 統計カード */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow p-6">
-            <p className="text-sm text-gray-600">今月の支払予定</p>
-            <p className="text-2xl font-bold text-gray-900 mt-2">
+            <p className="text-sm text-gray-600">未処理</p>
+            <p className="text-2xl font-bold text-yellow-600 mt-2">
               ¥{pendingAmount.toLocaleString()}
             </p>
             <p className="text-xs text-gray-500 mt-1">未処理分</p>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
-            <p className="text-sm text-gray-600">支払済み</p>
-            <p className="text-2xl font-bold text-green-600 mt-2">
-              ¥{paidAmount.toLocaleString()}
+            <p className="text-sm text-gray-600">CSV出力済み</p>
+            <p className="text-2xl font-bold text-blue-600 mt-2">
+              ¥{exportedAmount.toLocaleString()}
             </p>
-            <p className="text-xs text-gray-500 mt-1">完了分</p>
+            <p className="text-xs text-gray-500 mt-1">出力済み分</p>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <p className="text-sm text-gray-600">合計金額</p>
@@ -200,13 +159,6 @@ export default function PaymentPage() {
               ¥{totalAmount.toLocaleString()}
             </p>
             <p className="text-xs text-gray-500 mt-1">全支払</p>
-          </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <p className="text-sm text-gray-600">支払件数</p>
-            <p className="text-2xl font-bold text-gray-900 mt-2">
-              {payments.length}
-            </p>
-            <p className="text-xs text-gray-500 mt-1">取引先数</p>
           </div>
         </div>
 
@@ -222,7 +174,7 @@ export default function PaymentPage() {
                 className="px-3 py-2 border border-gray-300 rounded-md"
               />
             </div>
-            <div className="space-x-2">
+            <div>
               <button
                 onClick={() => setShowExportModal(true)}
                 disabled={selectedItems.length === 0}
@@ -233,17 +185,6 @@ export default function PaymentPage() {
                 }`}
               >
                 CSVエクスポート ({selectedItems.length}件)
-              </button>
-              <button
-                onClick={handleExportBankData}
-                disabled={selectedItems.length === 0}
-                className={`px-4 py-2 rounded-md ${
-                  selectedItems.length > 0
-                    ? 'bg-blue-600 text-white hover:bg-blue-700'
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                }`}
-              >
-                振込データ作成
               </button>
             </div>
           </div>
@@ -279,9 +220,6 @@ export default function PaymentPage() {
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   ステータス
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  銀行情報
                 </th>
               </tr>
             </thead>
@@ -334,12 +272,6 @@ export default function PaymentPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {getStatusBadge(payment.status)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-xs text-gray-600">
-                      <div>{payment.bankInfo.bankName} {payment.bankInfo.branchName}</div>
-                      <div>{payment.bankInfo.accountType} {payment.bankInfo.accountNumber}</div>
-                    </div>
                   </td>
                 </tr>
               ))}

@@ -1,10 +1,13 @@
 import { create } from 'zustand';
 
+type StaffRole = '社長' | '常務' | '管理部長' | '経理' | 'メンバー';
+
 interface User {
   id: string;
   email: string;
   name: string;
-  role: 'admin' | 'member';
+  role: StaffRole;
+  department?: '建設' | '経理';
 }
 
 interface AuthState {
@@ -19,30 +22,77 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
 
   login: async (email: string, password: string) => {
-    // 仮の認証処理（後でSupabaseに置き換え）
-    if (email === 'admin@example.com' && password === 'password') {
-      set({
+    // テストアカウント（後でSupabaseに置き換え）
+    const testAccounts = [
+      {
+        email: 'president@example.com',
+        password: 'password',
         user: {
           id: '1',
-          email: 'admin@example.com',
-          name: '管理者',
-          role: 'admin',
+          email: 'president@example.com',
+          name: '山田太郎',
+          role: '社長' as StaffRole,
+          department: '建設' as const,
         },
-        isAuthenticated: true,
-      });
-      return true;
-    } else if (email === 'user@example.com' && password === 'password') {
-      set({
+      },
+      {
+        email: 'director@example.com',
+        password: 'password',
         user: {
           id: '2',
-          email: 'user@example.com',
-          name: 'メンバー',
-          role: 'member',
+          email: 'director@example.com',
+          name: '佐藤次郎',
+          role: '常務' as StaffRole,
+          department: '建設' as const,
         },
+      },
+      {
+        email: 'manager@example.com',
+        password: 'password',
+        user: {
+          id: '3',
+          email: 'manager@example.com',
+          name: '鈴木三郎',
+          role: '管理部長' as StaffRole,
+          department: '建設' as const,
+        },
+      },
+      {
+        email: 'accounting@example.com',
+        password: 'password',
+        user: {
+          id: '4',
+          email: 'accounting@example.com',
+          name: '田中花子',
+          role: '経理' as StaffRole,
+          department: '経理' as const,
+        },
+      },
+      {
+        email: 'member@example.com',
+        password: 'password',
+        user: {
+          id: '5',
+          email: 'member@example.com',
+          name: '高橋五郎',
+          role: 'メンバー' as StaffRole,
+          department: '建設' as const,
+        },
+      },
+    ];
+
+    const account = testAccounts.find(
+      (acc) => acc.email === email && acc.password === password
+    );
+
+    if (account) {
+      set({
+        user: account.user,
         isAuthenticated: true,
       });
       return true;
     }
+
     return false;
   },
 

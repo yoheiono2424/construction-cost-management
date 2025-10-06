@@ -7,7 +7,7 @@ import { useAuthStore } from '@/app/stores/authStore';
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuthStore();
-  const [email, setEmail] = useState('admin@example.com');
+  const [email, setEmail] = useState('accounting@example.com');
   const [password, setPassword] = useState('password');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -20,7 +20,15 @@ export default function LoginPage() {
     const success = await login(email, password);
 
     if (success) {
-      router.push('/dashboard');
+      // ログイン成功後、ユーザー情報を取得
+      const user = useAuthStore.getState().user;
+
+      // 社長の場合は承認待ちページへ、それ以外は工事一覧ページへ
+      if (user?.role === '社長') {
+        router.push('/approvals');
+      } else {
+        router.push('/projects');
+      }
     } else {
       setError('メールアドレスまたはパスワードが正しくありません');
     }
@@ -91,10 +99,30 @@ export default function LoginPage() {
             {isLoading ? 'ログイン中...' : 'ログイン'}
           </button>
 
-          <div className="mt-4 text-sm text-gray-600">
-            <p>テスト用アカウント:</p>
-            <p className="mt-1">管理者: admin@example.com / password</p>
-            <p>メンバー: user@example.com / password</p>
+          <div className="mt-6 text-sm text-gray-600 bg-gray-50 p-4 rounded-md">
+            <p className="font-semibold mb-2">テスト用アカウント:</p>
+            <div className="space-y-1">
+              <p className="flex items-center">
+                <span className="inline-block w-16 px-2 py-0.5 text-xs bg-purple-100 text-purple-800 rounded mr-2">社長</span>
+                president@example.com / password
+              </p>
+              <p className="flex items-center">
+                <span className="inline-block w-16 px-2 py-0.5 text-xs bg-indigo-100 text-indigo-800 rounded mr-2">常務</span>
+                director@example.com / password
+              </p>
+              <p className="flex items-center">
+                <span className="inline-block w-16 px-2 py-0.5 text-xs bg-blue-100 text-blue-800 rounded mr-2">管理部長</span>
+                manager@example.com / password
+              </p>
+              <p className="flex items-center">
+                <span className="inline-block w-16 px-2 py-0.5 text-xs bg-green-100 text-green-800 rounded mr-2">経理</span>
+                accounting@example.com / password
+              </p>
+              <p className="flex items-center">
+                <span className="inline-block w-16 px-2 py-0.5 text-xs bg-gray-100 text-gray-800 rounded mr-2">メンバー</span>
+                member@example.com / password
+              </p>
+            </div>
           </div>
         </form>
       </div>
