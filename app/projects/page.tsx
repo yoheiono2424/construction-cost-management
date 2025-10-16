@@ -301,8 +301,8 @@ export default function ProjectsPage() {
           {/* スマホ表示 */}
           <div className="md:hidden mb-4">
             <h1 className="text-xl font-bold text-gray-900 mb-2">工事一覧</h1>
-            {/* メンバー・社長以外はボタンを表示 */}
-            {user?.role !== 'メンバー' && user?.role !== '社長' && (
+            {/* メンバー・承認者（社長・常務・管理部長）以外はボタンを表示 */}
+            {user?.role !== 'メンバー' && !['社長', '常務', '管理部長'].includes(user?.role || '') && (
               <div className="flex flex-col gap-2">
                 <button
                   onClick={() => {
@@ -405,7 +405,8 @@ export default function ProjectsPage() {
 
         {/* 工事一覧 - PC表示（テーブル） */}
         <div className="hidden md:block bg-white rounded-lg shadow overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -432,7 +433,7 @@ export default function ProjectsPage() {
                 <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                   ステータス
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ width: '1%' }}>
                   操作
                 </th>
               </tr>
@@ -477,31 +478,31 @@ export default function ProjectsPage() {
                       {project.status}
                     </span>
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <div className="flex gap-2">
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500" style={{ width: '1%' }}>
+                    <div className="flex gap-2 justify-start">
                       <Link
                         href={`/projects/${project.id}`}
-                        className="px-3 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700 transition-colors"
+                        className="px-3 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700 transition-colors whitespace-nowrap"
                       >
                         詳細
                       </Link>
                       <Link
                         href={`/budgets/${project.id}`}
-                        className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors"
+                        className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors whitespace-nowrap"
                       >
                         実行予算書
                       </Link>
-                      <button
-                        disabled
-                        className="px-3 py-1 bg-gray-300 text-gray-500 text-xs rounded cursor-not-allowed"
+                      <Link
+                        href={`/estimates/${project.id}`}
+                        className="px-3 py-1 bg-orange-600 text-white text-xs rounded hover:bg-orange-700 transition-colors whitespace-nowrap"
                       >
-                        見積もり（未実装）
-                      </button>
+                        見積書
+                      </Link>
                       {/* メンバー以外は工事台帳ボタンを表示 */}
                       {user?.role !== 'メンバー' && (
                         <Link
                           href={`/ledgers/${project.id}`}
-                          className="px-3 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors"
+                          className="px-3 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors whitespace-nowrap"
                         >
                           工事台帳
                         </Link>
@@ -512,6 +513,7 @@ export default function ProjectsPage() {
               ))}
             </tbody>
           </table>
+          </div>
 
           {/* データがない場合 */}
           {filteredProjects.length === 0 && (
@@ -567,7 +569,7 @@ export default function ProjectsPage() {
               </div>
 
               {/* 操作ボタン */}
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 <Link
                   href={`/projects/${project.id}`}
                   className="px-3 py-2 bg-gray-600 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors text-center"
@@ -579,6 +581,12 @@ export default function ProjectsPage() {
                   className="px-3 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors text-center"
                 >
                   実行予算書
+                </Link>
+                <Link
+                  href={`/estimates/${project.id}`}
+                  className="px-3 py-2 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition-colors text-center"
+                >
+                  見積書
                 </Link>
               </div>
             </div>

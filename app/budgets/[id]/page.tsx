@@ -4,6 +4,7 @@ import Layout from '@/app/components/Layout';
 import { useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/app/stores/authStore';
+import { BudgetStatus } from '@/app/types/budget';
 
 interface BudgetDetailItem {
   id: string;
@@ -41,7 +42,7 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
           customer: '○○工業株式会社',
           period: '2025/04/01 〜 2025/12/31',
           contractAmount: 150000000,
-          status: 'pending_manager' as 'draft' | 'pending_manager' | 'pending_director' | 'pending_president' | 'approved' | 'rejected',
+          status: 'pending_manager' as BudgetStatus,
           createdBy: '高橋五郎',
           createdAt: '2025/09/28',
         };
@@ -52,7 +53,7 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
           customer: '△△不動産株式会社',
           period: '2025/03/15 〜 2025/09/30',
           contractAmount: 85000000,
-          status: 'pending_manager' as 'draft' | 'pending_manager' | 'pending_director' | 'pending_president' | 'approved' | 'rejected',
+          status: 'pending_manager' as BudgetStatus,
           createdBy: '高橋五郎',
           createdAt: '2025/09/30',
         };
@@ -63,7 +64,7 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
           customer: '××製造株式会社',
           period: '2025/05/01 〜 2026/03/31',
           contractAmount: 220000000,
-          status: 'pending_president' as 'draft' | 'pending_manager' | 'pending_director' | 'pending_president' | 'approved' | 'rejected',
+          status: 'pending_president' as BudgetStatus,
           createdBy: '田中花子',
           createdAt: '2025/10/01',
         };
@@ -74,7 +75,7 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
           customer: '○○工業株式会社',
           period: '2025/02/01 〜 2025/06/30',
           contractAmount: 50000000,
-          status: 'draft' as 'draft' | 'pending_manager' | 'pending_director' | 'pending_president' | 'approved' | 'rejected',
+          status: 'draft' as BudgetStatus,
           createdBy: '山田太郎',
           createdAt: '2025/01/19',
         };
@@ -273,13 +274,33 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
     router.push('/budgets');
   };
 
-  // 承認ボタンの表示制御
+  // 最終承認申請ボタンの処理
+  const handleSubmitForFinalApproval = () => {
+    console.log('最終承認申請を送信しました');
+    // TODO: ステータスを'final_pending_manager'に更新
+    router.push('/budgets');
+  };
+
+  // 変更申請ボタンの処理
+  const handleRequestChange = () => {
+    console.log('変更申請を送信しました');
+    // TODO: 変更申請モーダルを表示
+    // TODO: ステータスを'change_request'に更新
+  };
+
+  // 承認ボタンの表示制御（第1回・第2回承認フロー対応）
   const canApprove = () => {
     if (!user) return false;
 
+    // 第1回承認フロー
     if (budget.status === 'pending_manager' && user.role === '管理部長') return true;
     if (budget.status === 'pending_director' && user.role === '常務') return true;
     if (budget.status === 'pending_president' && user.role === '社長') return true;
+
+    // 第2回承認フロー（最終承認）
+    if (budget.status === 'final_pending_manager' && user.role === '管理部長') return true;
+    if (budget.status === 'final_pending_director' && user.role === '常務') return true;
+    if (budget.status === 'final_pending_president' && user.role === '社長') return true;
 
     return false;
   };
@@ -288,6 +309,19 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
   const canSubmitForApproval = () => {
     if (!user) return false;
     return budget.status === 'draft' && (user.role === 'メンバー' || user.role === '経理');
+  };
+
+  // 最終承認申請ボタンの表示制御
+  const canSubmitForFinalApproval = () => {
+    if (!user) return false;
+    return budget.status === 'in_progress' && (user.role === 'メンバー' || user.role === '経理');
+  };
+
+  // 変更申請ボタンの表示制御
+  const canRequestChange = () => {
+    if (!user) return false;
+    return (budget.status === 'in_progress' || budget.status === 'completed') &&
+           (user.role === 'メンバー' || user.role === '経理');
   };
 
   // スマホ用：カード形式表示（予算のみ）
@@ -629,7 +663,15 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
       <div className="max-w-full mx-auto px-4">
         {/* ヘッダー - PC表示 */}
         <div className="hidden md:flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">実行予算書・原価管理</h1>
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => router.back()}
+              className="px-3 py-2 text-gray-600 hover:text-gray-900"
+            >
+              ← 戻る
+            </button>
+            <h1 className="text-2xl font-bold text-gray-900">実行予算書・原価管理</h1>
+          </div>
           <div className="flex items-center gap-3">
             {/* 承認申請ボタン（下書き状態でメンバー・経理のみ表示） */}
             {canSubmitForApproval() && (
@@ -638,6 +680,26 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
                 className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
               >
                 承認申請
+              </button>
+            )}
+
+            {/* 最終承認申請ボタン（進行中状態でメンバー・経理のみ表示） */}
+            {canSubmitForFinalApproval() && (
+              <button
+                onClick={handleSubmitForFinalApproval}
+                className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700"
+              >
+                最終承認申請
+              </button>
+            )}
+
+            {/* 変更申請ボタン（進行中・完了状態でメンバー・経理のみ表示） */}
+            {canRequestChange() && (
+              <button
+                onClick={handleRequestChange}
+                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
+              >
+                変更申請
               </button>
             )}
 
@@ -673,13 +735,6 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
                 PDF Export
               </button>
             )}
-
-            <button
-              onClick={() => router.back()}
-              className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
-            >
-              ← 戻る
-            </button>
           </div>
         </div>
 
@@ -720,6 +775,26 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
               承認申請
             </button>
           )}
+
+          {/* 最終承認申請ボタン（スマホ） */}
+          {canSubmitForFinalApproval() && (
+            <button
+              onClick={handleSubmitForFinalApproval}
+              className="w-full px-6 py-3 bg-orange-600 text-white text-base font-semibold rounded-lg hover:bg-orange-700 mb-3"
+            >
+              最終承認申請
+            </button>
+          )}
+
+          {/* 変更申請ボタン（スマホ） */}
+          {canRequestChange() && (
+            <button
+              onClick={handleRequestChange}
+              className="w-full px-6 py-3 bg-purple-600 text-white text-base font-semibold rounded-lg hover:bg-purple-700 mb-3"
+            >
+              変更申請
+            </button>
+          )}
         </div>
 
         {/* ステータスバー - PC表示 */}
@@ -728,6 +803,7 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2">
                 <span className="text-sm text-gray-600">ステータス：</span>
+                {/* 第1回承認フロー */}
                 {budget.status === 'draft' && (
                   <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">
                     下書き
@@ -748,14 +824,48 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
                     承認待ち（社長）
                   </span>
                 )}
-                {budget.status === 'approved' && (
-                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                    承認済み
-                  </span>
-                )}
                 {budget.status === 'rejected' && (
                   <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">
                     却下
+                  </span>
+                )}
+                {/* 工事進行中 */}
+                {budget.status === 'in_progress' && (
+                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                    進行中
+                  </span>
+                )}
+                {/* 第2回承認フロー（最終承認） */}
+                {budget.status === 'final_pending_manager' && (
+                  <span className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
+                    最終承認待ち（管理部長）
+                  </span>
+                )}
+                {budget.status === 'final_pending_director' && (
+                  <span className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
+                    最終承認待ち（常務）
+                  </span>
+                )}
+                {budget.status === 'final_pending_president' && (
+                  <span className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
+                    最終承認待ち（社長）
+                  </span>
+                )}
+                {budget.status === 'final_rejected' && (
+                  <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">
+                    最終却下
+                  </span>
+                )}
+                {/* 完了 */}
+                {budget.status === 'completed' && (
+                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                    完了
+                  </span>
+                )}
+                {/* 変更申請 */}
+                {budget.status === 'change_request' && (
+                  <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
+                    変更申請中
                   </span>
                 )}
               </div>
@@ -777,6 +887,7 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm text-gray-600">ステータス</span>
+              {/* 第1回承認フロー */}
               {budget.status === 'draft' && (
                 <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">
                   下書き
@@ -797,14 +908,48 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
                   承認待ち（社長）
                 </span>
               )}
-              {budget.status === 'approved' && (
-                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                  承認済み
-                </span>
-              )}
               {budget.status === 'rejected' && (
                 <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">
                   却下
+                </span>
+              )}
+              {/* 工事進行中 */}
+              {budget.status === 'in_progress' && (
+                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                  進行中
+                </span>
+              )}
+              {/* 第2回承認フロー（最終承認） */}
+              {budget.status === 'final_pending_manager' && (
+                <span className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
+                  最終承認待ち（管理部長）
+                </span>
+              )}
+              {budget.status === 'final_pending_director' && (
+                <span className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
+                  最終承認待ち（常務）
+                </span>
+              )}
+              {budget.status === 'final_pending_president' && (
+                <span className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
+                  最終承認待ち（社長）
+                </span>
+              )}
+              {budget.status === 'final_rejected' && (
+                <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">
+                  最終却下
+                </span>
+              )}
+              {/* 完了 */}
+              {budget.status === 'completed' && (
+                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                  完了
+                </span>
+              )}
+              {/* 変更申請 */}
+              {budget.status === 'change_request' && (
+                <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium">
+                  変更申請中
                 </span>
               )}
             </div>
@@ -876,7 +1021,7 @@ export default function BudgetDetailPage({ params }: { params: Promise<{ id: str
             <h2 className="text-lg font-semibold">実行予算書</h2>
             <div className="flex items-center gap-2">
               {/* 編集ボタン（社長以外に表示） */}
-              {viewMode === 'budget' && user?.role !== '社長' && (budget.status === 'draft' || budget.status === 'pending_manager' || budget.status === 'pending_director' || budget.status === 'pending_president' || (['常務', '管理部長'].includes(user?.role || '') && budget.status === 'approved')) && (
+              {viewMode === 'budget' && user?.role !== '社長' && (budget.status === 'draft' || budget.status === 'pending_manager' || budget.status === 'pending_director' || budget.status === 'pending_president' || (['常務', '管理部長'].includes(user?.role || '') && budget.status === 'in_progress')) && (
                 <button
                   onClick={() => router.push(`/budgets/${budget.id}/edit`)}
                   className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"

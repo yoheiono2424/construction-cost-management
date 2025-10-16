@@ -150,16 +150,6 @@ export default function Layout({ children }: LayoutProps) {
       allowedRoles: ['社長', '常務', '管理部長', '経理'],
     },
     {
-      name: '予実レポート',
-      href: '/reports',
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-      ),
-      allowedRoles: ['社長', '常務', '管理部長', '経理'],
-    },
-    {
       name: 'スタッフ管理',
       href: '/staff',
       icon: (
@@ -178,10 +168,11 @@ export default function Layout({ children }: LayoutProps) {
       item.allowedRoles.includes(user?.role || '')
     );
 
-    // 社長アカウント + スマホ表示（768px以下）の場合は3つのメニューのみ
-    if (user?.role === '社長' && isMobile) {
+    // 承認者（社長・常務・管理部長）+ スマホ表示（768px以下）の場合は2つのメニューのみ
+    const isApprover = ['社長', '常務', '管理部長'].includes(user?.role || '');
+    if (isApprover && isMobile) {
       return roleFiltered.filter((item) =>
-        ['承認待ち', '工事一覧', '予実レポート'].includes(item.name)
+        ['承認待ち', '工事一覧'].includes(item.name)
       );
     }
 
@@ -206,7 +197,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* サイドバー */}
-      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out shadow-lg`}>
+      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 w-64 min-w-64 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out shadow-lg flex-shrink-0`}>
         <div className="flex flex-col h-full">
           {/* ロゴ/タイトル */}
           <div className="flex items-center h-16 px-6 bg-gradient-to-r from-blue-600 to-blue-700">

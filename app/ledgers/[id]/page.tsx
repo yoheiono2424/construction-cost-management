@@ -1,6 +1,5 @@
 'use client';
 
-import { use } from 'react';
 import { useRouter } from 'next/navigation';
 import Layout from '@/app/components/Layout';
 
@@ -24,7 +23,8 @@ const mockLedger = {
 
 export default function LedgerPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
-  const _resolvedParams = use(params); // 将来のために保持
+  // paramsは将来的にデータ取得で使用予定（現在はモックデータのため未使用）
+  void params;
 
   return (
     <Layout>

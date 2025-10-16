@@ -33,6 +33,7 @@ export default function NewLaborEntryPage() {
   const router = useRouter();
   const [selectedEmployee, setSelectedEmployee] = useState('');
   const [targetMonth, setTargetMonth] = useState('2025-09');
+  const [dailyRate, setDailyRate] = useState(18000); // 労務費単価（デフォルト18,000円）
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [searchingRowId, setSearchingRowId] = useState<string | null>(null);
   const [projectSearchTerm, setProjectSearchTerm] = useState('');
@@ -72,7 +73,7 @@ export default function NewLaborEntryPage() {
 
   // 合計計算
   const totalDays = entries.reduce((sum, entry) => sum + entry.days, 0);
-  const totalCost = totalDays * 15000;
+  const totalCost = totalDays * dailyRate;
 
   // 保存処理
   const handleSubmit = (e: React.FormEvent) => {
@@ -100,6 +101,7 @@ export default function NewLaborEntryPage() {
     console.log('保存データ:', {
       employeeId: selectedEmployee,
       targetMonth,
+      dailyRate,
       entries,
       totalDays,
       totalCost,
@@ -159,7 +161,7 @@ export default function NewLaborEntryPage() {
           <div className="bg-white rounded-lg shadow p-6 mb-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">基本情報</h2>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-3 gap-6">
               {/* 従業員選択 */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -190,6 +192,22 @@ export default function NewLaborEntryPage() {
                   required
                   value={targetMonth}
                   onChange={(e) => setTargetMonth(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              {/* 労務費単価 */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  労務費単価（円/日） <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  required
+                  min="1"
+                  step="100"
+                  value={dailyRate}
+                  onChange={(e) => setDailyRate(parseInt(e.target.value) || 18000)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
@@ -277,7 +295,7 @@ export default function NewLaborEntryPage() {
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">
-                          ¥{(entry.days * 15000).toLocaleString()}
+                          ¥{(entry.days * dailyRate).toLocaleString()}
                         </div>
                       </td>
                       <td className="px-4 py-4 whitespace-nowrap">
@@ -319,7 +337,7 @@ export default function NewLaborEntryPage() {
                 </div>
               </div>
               <div className="mt-2 text-right text-sm text-gray-500">
-                単価：¥15,000/日（固定）
+                単価：¥{dailyRate.toLocaleString()}/日
               </div>
             </div>
           </div>

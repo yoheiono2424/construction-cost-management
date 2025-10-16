@@ -1,7 +1,6 @@
 'use client';
 
 import Layout from '@/app/components/Layout';
-import { use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -36,6 +35,8 @@ interface Project {
   contractAmount: number;
   changeAmount?: number;
   finalAmount?: number;
+  billingDate?: string;
+  paymentDate?: string;
   documentManager?: string;
   chiefEngineer?: string;
   siteAgent?: string;
@@ -74,6 +75,8 @@ const dummyProject: Project = {
   contractAmount: 150000000,
   changeAmount: 0,
   finalAmount: 150000000,
+  billingDate: '2025-09-30',
+  paymentDate: '2025-10-15',
   documentManager: '山田太郎',
   chiefEngineer: '佐藤次郎',
   siteAgent: '鈴木三郎',
@@ -87,7 +90,8 @@ const dummyProject: Project = {
 
 export default function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
-  const _resolvedParams = use(params); // 将来のために保持
+  // paramsは将来的にデータ取得で使用予定（現在はモックデータのため未使用）
+  void params;
   const project = dummyProject; // 実際はAPIから取得
 
   const getStatusColor = (status: ProjectStatus) => {
@@ -110,7 +114,15 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
       <div className="p-8">
         {/* ヘッダー */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">工事詳細</h1>
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => router.back()}
+              className="px-3 py-2 text-gray-600 hover:text-gray-900"
+            >
+              ← 戻る
+            </button>
+            <h1 className="text-2xl font-bold text-gray-900">工事詳細</h1>
+          </div>
           <div className="flex gap-3">
             <Link
               href={`/projects/${project.id}/edit`}
@@ -118,12 +130,6 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             >
               編集
             </Link>
-            <button
-              onClick={() => router.back()}
-              className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
-            >
-              ← 戻る
-            </button>
           </div>
         </div>
 
@@ -272,6 +278,14 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
               <p className="text-lg font-bold text-blue-600">
                 ¥{(project.finalAmount || project.contractAmount).toLocaleString()}
               </p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-600">請求日</p>
+              <p className="text-sm font-medium">{project.billingDate || '-'}</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-600">入金日</p>
+              <p className="text-sm font-medium">{project.paymentDate || '-'}</p>
             </div>
           </div>
         </div>

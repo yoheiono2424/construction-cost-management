@@ -1,7 +1,7 @@
 'use client';
 
 import Layout from '@/app/components/Layout';
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 // 型定義
@@ -35,6 +35,8 @@ interface Project {
   contractAmount: number;
   changeAmount?: number;
   finalAmount?: number;
+  billingDate?: string;
+  paymentDate?: string;
   documentManager?: string;
   chiefEngineer?: string;
   siteAgent?: string;
@@ -73,6 +75,8 @@ const dummyProject: Project = {
   contractAmount: 150000000,
   changeAmount: 0,
   finalAmount: 150000000,
+  billingDate: '2025-09-30',
+  paymentDate: '2025-10-15',
   documentManager: '山田太郎',
   chiefEngineer: '佐藤次郎',
   siteAgent: '鈴木三郎',
@@ -86,7 +90,8 @@ const dummyProject: Project = {
 
 export default function ProjectEditPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
-  const _resolvedParams = use(params); // 将来のために保持
+  // paramsは将来的にデータ取得で使用予定（現在はモックデータのため未使用）
+  void params;
   const [formData, setFormData] = useState<Project>(dummyProject);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -491,6 +496,30 @@ export default function ProjectEditPage({ params }: { params: Promise<{ id: stri
                   type="number"
                   value={formData.finalAmount || ''}
                   onChange={(e) => handleChange('finalAmount', e.target.value ? Number(e.target.value) : undefined)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  請求日
+                </label>
+                <input
+                  type="date"
+                  value={formData.billingDate || ''}
+                  onChange={(e) => handleChange('billingDate', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  入金日
+                </label>
+                <input
+                  type="date"
+                  value={formData.paymentDate || ''}
+                  onChange={(e) => handleChange('paymentDate', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
