@@ -1,13 +1,14 @@
 'use client';
 
 import Layout from '@/app/components/Layout';
-import { useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useCallback, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/app/stores/authStore';
-import { useEffect } from 'react';
 
-export default function InvoiceUploadPage() {
+function InvoiceUploadContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const type = searchParams.get('type') as 'construction' | 'other' || 'construction';
   const { isAuthenticated } = useAuthStore();
   const [isDragging, setIsDragging] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -71,12 +72,18 @@ export default function InvoiceUploadPage() {
     return null;
   }
 
+  const pageTitle = type === 'construction' ? '工事請求書アップロード' : 'その他請求書アップロード';
+  const pageDescription = type === 'construction'
+    ? '工事関連の請求書をアップロードしてOCR処理を開始します'
+    : 'その他の請求書をアップロードしてOCR処理を開始します';
+  const checkPageUrl = `/invoices/check?type=${type}`;
+
   return (
     <Layout>
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">請求書アップロード</h1>
-          <p className="text-sm text-gray-600 mt-1">請求書をアップロードしてOCR処理を開始します</p>
+          <h1 className="text-2xl font-bold text-gray-900">{pageTitle}</h1>
+          <p className="text-sm text-gray-600 mt-1">{pageDescription}</p>
         </div>
 
         {/* アップロードエリア */}
@@ -98,7 +105,7 @@ export default function InvoiceUploadPage() {
                 <p className="text-sm text-gray-500 mt-1">または</p>
               </div>
               <button
-                onClick={() => router.push('/invoices/check')}
+                onClick={() => router.push(checkPageUrl)}
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
               >
                 ファイルを選択
@@ -150,7 +157,7 @@ export default function InvoiceUploadPage() {
                   クリア
                 </button>
                 <button
-                  onClick={() => router.push('/invoices/check')}
+                  onClick={() => router.push(checkPageUrl)}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                 >
                   OCR処理開始
@@ -161,5 +168,13 @@ export default function InvoiceUploadPage() {
         </div>
       </div>
     </Layout>
+  );
+}
+
+export default function InvoiceUploadPage() {
+  return (
+    <Suspense fallback={<div className="p-8">読み込み中...</div>}>
+      <InvoiceUploadContent />
+    </Suspense>
   );
 }

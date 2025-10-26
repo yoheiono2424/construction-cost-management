@@ -15,6 +15,7 @@ interface Project {
   id: number;
   no: number;
   projectNumber: string;
+  projectType: ProjectType; // 工事種別（公共/民間/下請/不動産）
   progress: number; // 進捗率（0-100）
   orderReceiver: string; // 受注者
   performanceScore?: number; // 成績評定点
@@ -66,6 +67,7 @@ const dummyProjects: Project[] = [
     id: 1,
     no: 1,
     projectNumber: 'PJ-2025-001',
+    projectType: '公共',
     progress: 50,
     orderReceiver: '永伸建設株式会社',
     performanceScore: 75,
@@ -102,6 +104,7 @@ const dummyProjects: Project[] = [
     id: 2,
     no: 2,
     projectNumber: 'PJ-2025-002',
+    projectType: '民間',
     progress: 30,
     orderReceiver: '永伸建設株式会社',
     performanceScore: 80,
@@ -138,6 +141,7 @@ const dummyProjects: Project[] = [
     id: 3,
     no: 3,
     projectNumber: 'PJ-2025-003',
+    projectType: '下請',
     progress: 0,
     orderReceiver: '永伸建設株式会社',
     orderType: '国',
@@ -165,12 +169,49 @@ const dummyProjects: Project[] = [
     createdAt: '2025-04-20',
     updatedAt: '2025-10-02',
   },
+  {
+    id: 4,
+    no: 4,
+    projectNumber: 'PJ-2025-004',
+    projectType: '不動産',
+    progress: 75,
+    orderReceiver: '永伸建設株式会社',
+    performanceScore: 85,
+    orderType: '',
+    contractType: '',
+    industry: '建築一式',
+    department: '不動産部',
+    responsibleDivision: '開発課',
+    supervisor: '松本監督',
+    projectTitle: '令和7年度',
+    projectName: '○○タワーマンション建設工事',
+    location: '東京都港区○○3-4-5',
+    projectContent: 'RC造20階建てマンション新築工事一式',
+    contractDate: '2025-01-10',
+    startDate: '2025-02-01',
+    bufferPeriod: 45,
+    endDate: '2025-11-30',
+    periodChange: '',
+    inspectionDate: '2025-12-15',
+    contractAmount: 500000000,
+    changeAmount: 0,
+    finalAmount: 500000000,
+    documentManager: '渡辺次郎',
+    chiefEngineer: '伊藤三郎',
+    siteAgent: '中村四郎',
+    qualityInspector: '小林五郎',
+    constructionTeam: 'B班',
+    budgetStatus: '作成済み',
+    status: '進行中',
+    createdAt: '2025-01-10',
+    updatedAt: '2025-10-02',
+  },
 ];
 
-type ProjectType = '公共工事' | '民間工事';
+type ProjectType = '公共' | '民間' | '下請' | '不動産';
 
 // 実行予算書の承認ステータス
-type ApprovalStatus = '下書き' | '承認待ち（管理部長）' | '承認待ち（常務）' | '承認待ち（社長）' | '承認済み' | '却下';
+type ApprovalStatus = '下書き' | '承認待ち（部長）' | '承認待ち（常務）' | '承認待ち（社長）' | '承認済み' | '却下';
 
 // 承認待ち実行予算書の型定義
 interface PendingBudget {
@@ -192,7 +233,7 @@ const mockPendingBudgets: PendingBudget[] = [
     projectName: '○○ビル新築工事',
     applicant: '高橋五郎',
     applicationDate: '2025-09-28',
-    status: '承認待ち（管理部長）',
+    status: '承認待ち（部長）',
   },
   {
     id: 2,
@@ -201,7 +242,7 @@ const mockPendingBudgets: PendingBudget[] = [
     projectName: '△△マンション改修工事',
     applicant: '高橋五郎',
     applicationDate: '2025-09-30',
-    status: '承認待ち（管理部長）',
+    status: '承認待ち（部長）',
   },
   {
     id: 3,
@@ -217,7 +258,7 @@ const mockPendingBudgets: PendingBudget[] = [
 export default function ProjectsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<ProjectStatus | '全て'>('全て');
-  const [projectType, setProjectType] = useState<ProjectType>('公共工事');
+  const [projectType, setProjectType] = useState<ProjectType>('公共');
   const { user } = useAuthStore();
 
   // 承認待ち件数の計算
@@ -226,14 +267,14 @@ export default function ProjectsPage() {
 
     // ユーザーの権限に応じて承認待ち件数を計算
     switch (user.role) {
-      case '管理部長':
-        return mockPendingBudgets.filter(b => b.status === '承認待ち（管理部長）').length;
+      case '部長':
+        return mockPendingBudgets.filter(b => b.status === '承認待ち（部長）').length;
       case '常務':
         return mockPendingBudgets.filter(b => b.status === '承認待ち（常務）').length;
       case '社長':
         return mockPendingBudgets.filter(b => b.status === '承認待ち（社長）').length;
       default:
-        return 0; // メンバー・経理は承認権限なし
+        return 0; // 管理者・案件登録者・現場メンバーは承認権限なし
     }
   };
 
@@ -247,8 +288,8 @@ export default function ProjectsPage() {
       project.projectNumber.includes(searchTerm) ||
       project.orderReceiver.includes(searchTerm);
     const matchesStatus = statusFilter === '全て' || project.status === statusFilter;
-    // 現在は全てを公共工事として表示（将来的にprojectTypeフィールドで判定）
-    return matchesSearch && matchesStatus;
+    const matchesType = project.projectType === projectType;
+    return matchesSearch && matchesStatus && matchesType;
   });
 
   const getStatusColor = (status: ProjectStatus) => {
@@ -277,9 +318,9 @@ export default function ProjectsPage() {
               <h1 className="text-2xl font-bold text-gray-900">工事一覧</h1>
               <p className="text-sm text-gray-600 mt-1">工事情報の管理と各機能へのアクセス</p>
             </div>
-            {/* メンバー以外はボタンを表示 */}
-            {user?.role !== 'メンバー' && (
-              <div className="flex gap-3">
+            <div className="flex gap-3">
+              {/* 工事台帳一括ダウンロード：社長・常務・部長・管理者のみ表示 */}
+              {['社長', '常務', '部長', '管理者'].includes(user?.role || '') && (
                 <button
                   onClick={() => {
                     alert(`フィルター適用後の${filteredProjects.length}件の工事台帳をダウンロードします。\n\n※この機能は将来実装予定です。`);
@@ -288,22 +329,26 @@ export default function ProjectsPage() {
                 >
                   工事台帳一括ダウンロード
                 </button>
+              )}
+              {/* 新規工事登録：社長・常務・管理者・案件登録者のみ表示 */}
+              {['社長', '常務', '管理者', '案件登録者'].includes(user?.role || '') && (
                 <Link
                   href="/projects/new"
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   + 新規工事登録
                 </Link>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* スマホ表示 */}
           <div className="md:hidden mb-4">
             <h1 className="text-xl font-bold text-gray-900 mb-2">工事一覧</h1>
-            {/* メンバー・承認者（社長・常務・管理部長）以外はボタンを表示 */}
-            {user?.role !== 'メンバー' && !['社長', '常務', '管理部長'].includes(user?.role || '') && (
-              <div className="flex flex-col gap-2">
+            {/* 管理者・案件登録者のみボタンを表示（承認者は承認業務に集中） */}
+            <div className="flex flex-col gap-2">
+              {/* 工事台帳一括ダウンロード：管理者のみ表示 */}
+              {user?.role === '管理者' && (
                 <button
                   onClick={() => {
                     alert(`フィルター適用後の${filteredProjects.length}件の工事台帳をダウンロードします。\n\n※この機能は将来実装予定です。`);
@@ -312,14 +357,17 @@ export default function ProjectsPage() {
                 >
                   工事台帳一括ダウンロード
                 </button>
+              )}
+              {/* 新規工事登録：管理者・案件登録者のみ表示 */}
+              {['管理者', '案件登録者'].includes(user?.role || '') && (
                 <Link
                   href="/projects/new"
                   className="w-full px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors text-center"
                 >
                   + 新規工事登録
                 </Link>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* 承認待ちバナー */}
@@ -355,24 +403,44 @@ export default function ProjectsPage() {
           {/* タブ */}
           <div className="flex border-b border-gray-200 mb-4">
             <button
-              onClick={() => setProjectType('公共工事')}
+              onClick={() => setProjectType('公共')}
               className={`flex-1 md:flex-none px-4 md:px-6 py-3 font-medium text-sm border-b-2 transition-colors ${
-                projectType === '公共工事'
+                projectType === '公共'
                   ? 'border-blue-600 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
-              公共工事
+              公共
             </button>
             <button
-              onClick={() => setProjectType('民間工事')}
+              onClick={() => setProjectType('民間')}
               className={`flex-1 md:flex-none px-4 md:px-6 py-3 font-medium text-sm border-b-2 transition-colors ${
-                projectType === '民間工事'
+                projectType === '民間'
                   ? 'border-blue-600 text-blue-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
-              民間工事
+              民間
+            </button>
+            <button
+              onClick={() => setProjectType('下請')}
+              className={`flex-1 md:flex-none px-4 md:px-6 py-3 font-medium text-sm border-b-2 transition-colors ${
+                projectType === '下請'
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              下請
+            </button>
+            <button
+              onClick={() => setProjectType('不動産')}
+              className={`flex-1 md:flex-none px-4 md:px-6 py-3 font-medium text-sm border-b-2 transition-colors ${
+                projectType === '不動産'
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              不動産
             </button>
           </div>
 
@@ -498,8 +566,8 @@ export default function ProjectsPage() {
                       >
                         見積書
                       </Link>
-                      {/* メンバー以外は工事台帳ボタンを表示 */}
-                      {user?.role !== 'メンバー' && (
+                      {/* 現場メンバー以外は工事台帳ボタンを表示 */}
+                      {user?.role !== '現場メンバー' && (
                         <Link
                           href={`/ledgers/${project.id}`}
                           className="px-3 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors whitespace-nowrap"

@@ -25,9 +25,9 @@ function LaborManagementContent() {
   const searchParams = useSearchParams();
   const { user } = useAuthStore();
 
-  // 権限チェック：メンバーはアクセス不可
+  // 権限チェック：現場メンバーはアクセス不可
   useEffect(() => {
-    if (!user || user.role === 'メンバー') {
+    if (!user || user.role === '現場メンバー') {
       router.push('/projects');
     }
   }, [user, router]);

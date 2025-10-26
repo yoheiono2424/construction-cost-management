@@ -1,10 +1,10 @@
 'use client';
 
 import Layout from '@/app/components/Layout';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/app/stores/authStore';
-import { useEffect } from 'react';
+import SimpleCheck from './SimpleCheck';
 
 interface ProjectItem {
   id: string;
@@ -20,6 +20,7 @@ interface InvoiceData {
   imageUrl?: string;
   supplier: string;
   invoiceNumber: string;
+  qualifiedInvoiceNumber: string; // 適格請求番号
   invoiceDate: string;
   dueDate: string;
   projectItems: ProjectItem[]; // 現場別明細
@@ -27,8 +28,10 @@ interface InvoiceData {
   status: 'pending' | 'confirmed';
 }
 
-export default function InvoiceCheckPage() {
+function InvoiceCheckContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const type = searchParams.get('type') as 'construction' | 'other' || 'construction';
   const { isAuthenticated } = useAuthStore();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [formData, setFormData] = useState<InvoiceData | null>(null);
@@ -44,6 +47,7 @@ export default function InvoiceCheckPage() {
       imageUrl: '/invoice-sample-1.jpg',
       supplier: '株式会社A建設',
       invoiceNumber: 'INV-2025-001',
+      qualifiedInvoiceNumber: 'T1234567890123',
       invoiceDate: '2025-01-15',
       dueDate: '2025-02-15',
       projectItems: [
@@ -59,6 +63,7 @@ export default function InvoiceCheckPage() {
       imageUrl: '/invoice-sample-2.jpg',
       supplier: 'B工業株式会社',
       invoiceNumber: 'B-202501-123',
+      qualifiedInvoiceNumber: 'T9876543210987',
       invoiceDate: '2025-01-14',
       dueDate: '2025-02-14',
       projectItems: [
@@ -73,6 +78,7 @@ export default function InvoiceCheckPage() {
       imageUrl: '/invoice-sample-3.jpg',
       supplier: 'C商事株式会社',
       invoiceNumber: 'C-20250115',
+      qualifiedInvoiceNumber: 'T5555666677778',
       invoiceDate: '2025-01-12',
       dueDate: '2025-02-12',
       projectItems: [
@@ -185,7 +191,21 @@ export default function InvoiceCheckPage() {
     project.toLowerCase().includes(projectSearchTerm.toLowerCase())
   );
 
-  if (!isAuthenticated || !formData) {
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  // その他請求書の場合は簡易確認画面を表示
+  if (type === 'other') {
+    return (
+      <Layout>
+        <SimpleCheck />
+      </Layout>
+    );
+  }
+
+  // 工事請求書の場合（従来の詳細確認画面）
+  if (!formData) {
     return null;
   }
 
@@ -193,7 +213,7 @@ export default function InvoiceCheckPage() {
     <Layout>
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">請求書確認・修正</h1>
+          <h1 className="text-2xl font-bold text-gray-900">工事請求書確認・修正</h1>
           <p className="text-sm text-gray-600 mt-1">
             {currentIndex + 1} / {invoices.length} - {formData.fileName}
           </p>
@@ -228,6 +248,18 @@ export default function InvoiceCheckPage() {
                     value={formData.invoiceNumber}
                     onChange={(e) => handleInputChange('invoiceNumber', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    適格請求番号
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.qualifiedInvoiceNumber}
+                    onChange={(e) => handleInputChange('qualifiedInvoiceNumber', e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="T1234567890123"
                   />
                 </div>
                 <div>
@@ -505,5 +537,14 @@ export default function InvoiceCheckPage() {
         </div>
       )}
     </Layout>
+  );
+}
+
+
+export default function InvoiceCheckPage() {
+  return (
+    <Suspense fallback={<div className="p-8">読み込み中...</div>}>
+      <InvoiceCheckContent />
+    </Suspense>
   );
 }

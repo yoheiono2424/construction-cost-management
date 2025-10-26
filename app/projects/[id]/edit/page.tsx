@@ -8,11 +8,13 @@ import { useRouter } from 'next/navigation';
 type ProjectStatus = '準備中' | '進行中' | '完了' | '保留';
 type OrderType = '国' | '県' | '市' | '';
 type ContractType = '一般' | '指名' | '';
+type ProjectType = '公共' | '民間' | '下請' | '不動産';
 
 interface Project {
   id: number;
   no: number;
   projectNumber: string;
+  projectType: ProjectType;
   progress: number;
   orderReceiver: string;
   performanceScore?: number;
@@ -53,6 +55,7 @@ const dummyProject: Project = {
   id: 1,
   no: 1,
   projectNumber: 'PJ-2025-001',
+  projectType: '公共',
   progress: 50,
   orderReceiver: '永伸建設株式会社',
   performanceScore: 75,
@@ -234,6 +237,60 @@ export default function ProjectEditPage({ params }: { params: Promise<{ id: stri
           {/* 発注区分セクション */}
           <div className="bg-white rounded-lg shadow p-6 mb-6">
             <h2 className="text-lg font-semibold mb-4 border-b pb-2">発注区分</h2>
+
+            {/* 工事種別 */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                工事種別 <span className="text-red-500">*</span>
+              </label>
+              <div className="flex gap-6">
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    name="projectType"
+                    value="公共"
+                    checked={formData.projectType === '公共'}
+                    onChange={(e) => handleChange('projectType', e.target.value)}
+                    className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">公共</span>
+                </label>
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    name="projectType"
+                    value="民間"
+                    checked={formData.projectType === '民間'}
+                    onChange={(e) => handleChange('projectType', e.target.value)}
+                    className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">民間</span>
+                </label>
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    name="projectType"
+                    value="下請"
+                    checked={formData.projectType === '下請'}
+                    onChange={(e) => handleChange('projectType', e.target.value)}
+                    className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">下請</span>
+                </label>
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    name="projectType"
+                    value="不動産"
+                    checked={formData.projectType === '不動産'}
+                    onChange={(e) => handleChange('projectType', e.target.value)}
+                    className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">不動産</span>
+                </label>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">

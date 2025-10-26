@@ -7,7 +7,7 @@ import { useAuthStore } from '@/app/stores/authStore';
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuthStore();
-  const [email, setEmail] = useState('accounting@example.com');
+  const [email, setEmail] = useState('admin@example.com');
   const [password, setPassword] = useState('password');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +34,12 @@ export default function LoginPage() {
     }
 
     setIsLoading(false);
+  };
+
+  const fillTestAccount = (testEmail: string, testPassword: string) => {
+    setEmail(testEmail);
+    setPassword(testPassword);
+    setError('');
   };
 
   return (
@@ -100,28 +106,56 @@ export default function LoginPage() {
           </button>
 
           <div className="mt-6 text-sm text-gray-600 bg-gray-50 p-4 rounded-md">
-            <p className="font-semibold mb-2">テスト用アカウント:</p>
+            <p className="font-semibold mb-2">テスト用アカウント: <span className="text-xs font-normal text-gray-500">（クリックで自動入力）</span></p>
             <div className="space-y-1">
-              <p className="flex items-center">
-                <span className="inline-block w-16 px-2 py-0.5 text-xs bg-purple-100 text-purple-800 rounded mr-2">社長</span>
+              <button
+                type="button"
+                onClick={() => fillTestAccount('president@example.com', 'password')}
+                className="w-full flex items-center p-2 rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
+              >
+                <span className="inline-block w-20 px-2 py-0.5 text-xs bg-purple-100 text-purple-800 rounded mr-2">社長</span>
                 president@example.com / password
-              </p>
-              <p className="flex items-center">
-                <span className="inline-block w-16 px-2 py-0.5 text-xs bg-indigo-100 text-indigo-800 rounded mr-2">常務</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => fillTestAccount('director@example.com', 'password')}
+                className="w-full flex items-center p-2 rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
+              >
+                <span className="inline-block w-20 px-2 py-0.5 text-xs bg-indigo-100 text-indigo-800 rounded mr-2">常務</span>
                 director@example.com / password
-              </p>
-              <p className="flex items-center">
-                <span className="inline-block w-16 px-2 py-0.5 text-xs bg-blue-100 text-blue-800 rounded mr-2">管理部長</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => fillTestAccount('manager@example.com', 'password')}
+                className="w-full flex items-center p-2 rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
+              >
+                <span className="inline-block w-20 px-2 py-0.5 text-xs bg-blue-100 text-blue-800 rounded mr-2">部長</span>
                 manager@example.com / password
-              </p>
-              <p className="flex items-center">
-                <span className="inline-block w-16 px-2 py-0.5 text-xs bg-green-100 text-green-800 rounded mr-2">経理</span>
-                accounting@example.com / password
-              </p>
-              <p className="flex items-center">
-                <span className="inline-block w-16 px-2 py-0.5 text-xs bg-gray-100 text-gray-800 rounded mr-2">メンバー</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => fillTestAccount('admin@example.com', 'password')}
+                className="w-full flex items-center p-2 rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
+              >
+                <span className="inline-block w-20 px-2 py-0.5 text-xs bg-green-100 text-green-800 rounded mr-2">管理者</span>
+                admin@example.com / password
+              </button>
+              <button
+                type="button"
+                onClick={() => fillTestAccount('registrar@example.com', 'password')}
+                className="w-full flex items-center p-2 rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
+              >
+                <span className="inline-block w-20 px-2 py-0.5 text-xs bg-yellow-100 text-yellow-800 rounded mr-2">案件登録者</span>
+                registrar@example.com / password
+              </button>
+              <button
+                type="button"
+                onClick={() => fillTestAccount('member@example.com', 'password')}
+                className="w-full flex items-center p-2 rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
+              >
+                <span className="inline-block w-20 px-2 py-0.5 text-xs bg-gray-100 text-gray-800 rounded mr-2">現場メンバー</span>
                 member@example.com / password
-              </p>
+              </button>
             </div>
           </div>
         </form>

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-type StaffRole = '社長' | '常務' | '管理部長' | '経理' | 'メンバー';
+type StaffRole = '社長' | '常務' | '部長' | '管理者' | '案件登録者' | '現場メンバー';
 
 interface User {
   id: string;
@@ -53,29 +53,40 @@ export const useAuthStore = create<AuthState>((set) => ({
           id: '3',
           email: 'manager@example.com',
           name: '鈴木三郎',
-          role: '管理部長' as StaffRole,
+          role: '部長' as StaffRole,
           department: '建設' as const,
         },
       },
       {
-        email: 'accounting@example.com',
+        email: 'admin@example.com',
         password: 'password',
         user: {
           id: '4',
-          email: 'accounting@example.com',
+          email: 'admin@example.com',
           name: '田中花子',
-          role: '経理' as StaffRole,
+          role: '管理者' as StaffRole,
           department: '経理' as const,
+        },
+      },
+      {
+        email: 'registrar@example.com',
+        password: 'password',
+        user: {
+          id: '5',
+          email: 'registrar@example.com',
+          name: '高橋五郎',
+          role: '案件登録者' as StaffRole,
+          department: '建設' as const,
         },
       },
       {
         email: 'member@example.com',
         password: 'password',
         user: {
-          id: '5',
+          id: '6',
           email: 'member@example.com',
-          name: '高橋五郎',
-          role: 'メンバー' as StaffRole,
+          name: '伊藤六郎',
+          role: '現場メンバー' as StaffRole,
           department: '建設' as const,
         },
       },

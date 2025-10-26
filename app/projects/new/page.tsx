@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 type ProjectStatus = '準備中' | '進行中' | '完了' | '保留';
 type OrderType = '国' | '県' | '市' | '';
 type ContractType = '一般' | '指名' | '';
-type ProjectType = '公共工事' | '民間工事';
+type ProjectType = '公共' | '民間' | '下請' | '不動産';
 
 interface ProjectFormData {
   no: number;
@@ -56,7 +56,7 @@ export default function NewProjectPage() {
     progress: 0,
     orderReceiver: '永伸建設株式会社',
     performanceScore: undefined,
-    projectType: '公共工事',
+    projectType: '公共',
     orderType: '',
     contractType: '',
     industry: '',
@@ -236,23 +236,45 @@ export default function NewProjectPage() {
                   <input
                     type="radio"
                     name="projectType"
-                    value="公共工事"
-                    checked={formData.projectType === '公共工事'}
+                    value="公共"
+                    checked={formData.projectType === '公共'}
                     onChange={(e) => handleChange('projectType', e.target.value)}
                     className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                   />
-                  <span className="ml-2 text-sm text-gray-700">公共工事</span>
+                  <span className="ml-2 text-sm text-gray-700">公共</span>
                 </label>
                 <label className="flex items-center cursor-pointer">
                   <input
                     type="radio"
                     name="projectType"
-                    value="民間工事"
-                    checked={formData.projectType === '民間工事'}
+                    value="民間"
+                    checked={formData.projectType === '民間'}
                     onChange={(e) => handleChange('projectType', e.target.value)}
                     className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300"
                   />
-                  <span className="ml-2 text-sm text-gray-700">民間工事</span>
+                  <span className="ml-2 text-sm text-gray-700">民間</span>
+                </label>
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    name="projectType"
+                    value="下請"
+                    checked={formData.projectType === '下請'}
+                    onChange={(e) => handleChange('projectType', e.target.value)}
+                    className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">下請</span>
+                </label>
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    name="projectType"
+                    value="不動産"
+                    checked={formData.projectType === '不動産'}
+                    onChange={(e) => handleChange('projectType', e.target.value)}
+                    className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">不動産</span>
                 </label>
               </div>
             </div>

@@ -72,9 +72,9 @@ export default function ApprovalsPage() {
   const { user } = useAuthStore();
   const [searchTerm, setSearchTerm] = useState('');
 
-  // 権限チェック：管理部長・常務・社長のみアクセス可
+  // 権限チェック：部長・常務・社長のみアクセス可
   useEffect(() => {
-    if (!user || !['社長', '常務', '管理部長'].includes(user.role)) {
+    if (!user || !['社長', '常務', '部長'].includes(user.role)) {
       router.push('/projects');
     }
   }, [user, router]);
@@ -87,7 +87,7 @@ export default function ApprovalsPage() {
 
     // 権限別のフィルタリング（第1回・第2回承認フローの両方）
     switch (user.role) {
-      case '管理部長':
+      case '部長':
         filtered = filtered.filter(b =>
           b.status === 'pending_manager' || b.status === 'final_pending_manager'
         );
@@ -103,7 +103,7 @@ export default function ApprovalsPage() {
         );
         break;
       default:
-        return []; // メンバー・経理は承認権限なし
+        return []; // 管理者・案件登録者・現場メンバーは承認権限なし
     }
 
     // 検索フィルタリング
@@ -124,12 +124,12 @@ export default function ApprovalsPage() {
   const getStatusLabel = (status: BudgetStatus): string => {
     switch (status) {
       case 'draft': return '下書き';
-      case 'pending_manager': return '承認待ち（管理部長）';
+      case 'pending_manager': return '承認待ち（部長）';
       case 'pending_director': return '承認待ち（常務）';
       case 'pending_president': return '承認待ち（社長）';
       case 'rejected': return '却下';
       case 'in_progress': return '進行中';
-      case 'final_pending_manager': return '最終承認待ち（管理部長）';
+      case 'final_pending_manager': return '最終承認待ち（部長）';
       case 'final_pending_director': return '最終承認待ち（常務）';
       case 'final_pending_president': return '最終承認待ち（社長）';
       case 'final_rejected': return '最終却下';

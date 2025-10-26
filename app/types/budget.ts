@@ -21,14 +21,14 @@ export interface BudgetSection {
 export type BudgetStatus =
   // 第1回承認フロー関連
   | 'draft'                    // 下書き
-  | 'pending_manager'          // 承認待ち（管理部長）
+  | 'pending_manager'          // 承認待ち（部長）
   | 'pending_director'         // 承認待ち（常務）
   | 'pending_president'        // 承認待ち（社長）
   | 'rejected'                 // 却下
   // 工事進行中
   | 'in_progress'              // 進行中
   // 第2回承認フロー関連
-  | 'final_pending_manager'    // 最終承認待ち（管理部長）
+  | 'final_pending_manager'    // 最終承認待ち（部長）
   | 'final_pending_director'   // 最終承認待ち（常務）
   | 'final_pending_president'  // 最終承認待ち（社長）
   | 'final_rejected'           // 最終却下

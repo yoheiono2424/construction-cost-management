@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/app/stores/authStore';
 import { useEffect } from 'react';
 
-type StaffRole = '社長' | '常務' | '管理部長' | '経理' | 'メンバー';
+type StaffRole = '社長' | '常務' | '部長' | '管理者' | '案件登録者' | '現場メンバー';
 type Department = '建設' | '経理';
 
 interface Staff {
@@ -28,9 +28,9 @@ export default function StaffPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('all');
 
-  // 権限チェック：メンバーはアクセス不可
+  // 権限チェック：現場メンバーはアクセス不可
   useEffect(() => {
-    if (!currentUser || currentUser.role === 'メンバー') {
+    if (!currentUser || currentUser.role === '現場メンバー') {
       router.push('/projects');
     }
   }, [currentUser, router]);
@@ -56,30 +56,39 @@ export default function StaffPage() {
     },
     {
       id: '3',
-      name: '鈴木一郎',
+      name: '鈴木三郎',
       email: 'suzuki@example.com',
-      role: '管理部長',
+      role: '部長',
       department: '建設',
       lastLogin: '2025/01/18 16:45',
       createdAt: '2024/05/01',
     },
     {
       id: '4',
-      name: '田中美咲',
+      name: '田中花子',
       email: 'tanaka@example.com',
-      role: '経理',
+      role: '管理者',
       department: '経理',
       lastLogin: '2025/01/17 14:20',
       createdAt: '2024/06/01',
     },
     {
       id: '5',
-      name: '高橋次郎',
+      name: '高橋五郎',
       email: 'takahashi@example.com',
-      role: 'メンバー',
+      role: '案件登録者',
+      department: '建設',
+      lastLogin: '2025/01/19 13:15',
+      createdAt: '2024/07/01',
+    },
+    {
+      id: '6',
+      name: '伊藤六郎',
+      email: 'ito@example.com',
+      role: '現場メンバー',
       department: '建設',
       lastLogin: '2024/12/20 11:30',
-      createdAt: '2024/07/01',
+      createdAt: '2024/08/01',
     },
   ]);
 
@@ -87,7 +96,7 @@ export default function StaffPage() {
     name: '',
     email: '',
     password: '',
-    role: 'メンバー' as StaffRole,
+    role: '現場メンバー' as StaffRole,
     department: '建設' as Department,
   });
 
@@ -97,11 +106,11 @@ export default function StaffPage() {
     }
   }, [isAuthenticated, router]);
 
-  // 管理者権限チェック（社長・常務・管理部長・経理が編集可能）
+  // 管理者権限チェック（社長・常務・部長・管理者が編集可能）
   const canManageStaff = currentUser?.role === '社長' ||
                          currentUser?.role === '常務' ||
-                         currentUser?.role === '管理部長' ||
-                         currentUser?.role === '経理';
+                         currentUser?.role === '部長' ||
+                         currentUser?.role === '管理者';
 
   const filteredStaffList = staffList.filter(staff => {
     const matchesSearch =
@@ -121,7 +130,7 @@ export default function StaffPage() {
       name: '',
       email: '',
       password: '',
-      role: 'メンバー',
+      role: '現場メンバー',
       department: '建設',
     });
   };
@@ -141,9 +150,10 @@ export default function StaffPage() {
     const colors: Record<StaffRole, string> = {
       '社長': 'bg-purple-100 text-purple-800',
       '常務': 'bg-indigo-100 text-indigo-800',
-      '管理部長': 'bg-blue-100 text-blue-800',
-      '経理': 'bg-green-100 text-green-800',
-      'メンバー': 'bg-gray-100 text-gray-800',
+      '部長': 'bg-blue-100 text-blue-800',
+      '管理者': 'bg-green-100 text-green-800',
+      '案件登録者': 'bg-yellow-100 text-yellow-800',
+      '現場メンバー': 'bg-gray-100 text-gray-800',
     };
 
     return (
@@ -215,9 +225,10 @@ export default function StaffPage() {
                 <option value="all">すべて</option>
                 <option value="社長">社長</option>
                 <option value="常務">常務</option>
-                <option value="管理部長">管理部長</option>
-                <option value="経理">経理</option>
-                <option value="メンバー">メンバー</option>
+                <option value="部長">部長</option>
+                <option value="管理者">管理者</option>
+                <option value="案件登録者">案件登録者</option>
+                <option value="現場メンバー">現場メンバー</option>
               </select>
             </div>
           </div>
@@ -367,9 +378,10 @@ export default function StaffPage() {
                 >
                   <option value="社長">社長</option>
                   <option value="常務">常務</option>
-                  <option value="管理部長">管理部長</option>
-                  <option value="経理">経理</option>
-                  <option value="メンバー">メンバー</option>
+                  <option value="部長">部長</option>
+                  <option value="管理者">管理者</option>
+                  <option value="案件登録者">案件登録者</option>
+                  <option value="現場メンバー">現場メンバー</option>
                 </select>
               </div>
             </div>
@@ -431,9 +443,10 @@ export default function StaffPage() {
                 >
                   <option value="社長">社長</option>
                   <option value="常務">常務</option>
-                  <option value="管理部長">管理部長</option>
-                  <option value="経理">経理</option>
-                  <option value="メンバー">メンバー</option>
+                  <option value="部長">部長</option>
+                  <option value="管理者">管理者</option>
+                  <option value="案件登録者">案件登録者</option>
+                  <option value="現場メンバー">現場メンバー</option>
                 </select>
               </div>
             </div>
