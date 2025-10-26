@@ -474,34 +474,37 @@ export default function ProjectsPage() {
         {/* 工事一覧 - PC表示（テーブル） */}
         <div className="hidden md:block bg-white rounded-lg shadow overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+            <table className="min-w-full divide-y divide-gray-200" style={{ tableLayout: 'fixed' }}>
+            <colgroup>
+              <col style={{ width: '4%' }} /><col style={{ width: '10%' }} /><col style={{ width: '25%' }} /><col style={{ width: '12%' }} /><col style={{ width: '14%' }} /><col style={{ width: '11%' }} /><col style={{ width: '7%' }} /><col style={{ width: '8%' }} /><col style={{ width: '9%' }} />
+            </colgroup>
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-[13px] py-[10px] text-left text-[10px] font-medium text-gray-500 uppercase tracking-wider">
                   NO
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-[13px] py-[10px] text-left text-[10px] font-medium text-gray-500 uppercase tracking-wider">
                   工事番号
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-[13px] py-[10px] text-left text-[10px] font-medium text-gray-500 uppercase tracking-wider">
                   工事名
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-[13px] py-[10px] text-left text-[10px] font-medium text-gray-500 uppercase tracking-wider">
                   受注者
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-[13px] py-[10px] text-left text-[10px] font-medium text-gray-500 uppercase tracking-wider">
                   工期
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-[13px] py-[10px] text-right text-[10px] font-medium text-gray-500 uppercase tracking-wider">
                   受注金額
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-[13px] py-[10px] text-center text-[10px] font-medium text-gray-500 uppercase tracking-wider">
                   進捗率
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-[13px] py-[10px] text-center text-[10px] font-medium text-gray-500 uppercase tracking-wider">
                   ステータス
                 </th>
-                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ width: '1%' }}>
+                <th className="px-[13px] py-[10px] text-center text-[10px] font-medium text-gray-500 uppercase tracking-wider">
                   操作
                 </th>
               </tr>
@@ -512,57 +515,57 @@ export default function ProjectsPage() {
                   key={project.id}
                   className="hover:bg-gray-50 transition-colors"
                 >
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-[13px] py-[13px] whitespace-nowrap text-[11px] text-gray-500">
                     {project.no}
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
+                  <td className="px-[13px] py-[13px] whitespace-nowrap text-[11px] text-gray-900 font-medium">
                     {project.projectNumber}
                   </td>
-                  <td className="px-4 py-4 text-sm text-gray-900">
+                  <td className="px-[13px] py-[13px] text-[11px] text-gray-900 truncate" title={project.projectName}>
                     {project.projectName}
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-[13px] py-[13px] whitespace-nowrap text-[11px] text-gray-500 truncate" title={project.orderReceiver}>
                     {project.orderReceiver}
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-[13px] py-[13px] whitespace-nowrap text-[11px] text-gray-500">
                     {project.startDate} 〜 {project.endDate}
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-medium">
+                  <td className="px-[13px] py-[13px] whitespace-nowrap text-[11px] text-gray-900 text-right font-medium">
                     ¥{project.contractAmount.toLocaleString()}
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-center">
+                  <td className="px-[13px] py-[13px] whitespace-nowrap text-center">
                     <div className="flex items-center justify-center">
-                      <div className="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                      <div className="w-[51px] bg-gray-200 rounded-full h-[6px] mr-[6px]">
                         <div
-                          className="bg-blue-600 h-2 rounded-full"
+                          className="bg-blue-600 h-[6px] rounded-full"
                           style={{ width: `${project.progress}%` }}
                         ></div>
                       </div>
-                      <span className="text-sm text-gray-700">{project.progress}%</span>
+                      <span className="text-[11px] text-gray-700">{project.progress}%</span>
                     </div>
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-center">
-                    <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(project.status)}`}>
+                  <td className="px-[13px] py-[13px] whitespace-nowrap text-center">
+                    <span className={`px-[6px] py-1 inline-flex text-[10px] leading-5 font-semibold rounded-full ${getStatusColor(project.status)}`}>
                       {project.status}
                     </span>
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500" style={{ width: '1%' }}>
-                    <div className="flex gap-2 justify-start">
+                  <td className="px-[13px] py-[13px] whitespace-nowrap text-[11px] text-gray-500">
+                    <div className="flex gap-[6px] justify-start">
                       <Link
                         href={`/projects/${project.id}`}
-                        className="px-3 py-1 bg-gray-600 text-white text-xs rounded hover:bg-gray-700 transition-colors whitespace-nowrap"
+                        className="px-[10px] py-1 bg-gray-600 text-white text-[10px] rounded hover:bg-gray-700 transition-colors whitespace-nowrap"
                       >
                         詳細
                       </Link>
                       <Link
                         href={`/budgets/${project.id}`}
-                        className="px-3 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700 transition-colors whitespace-nowrap"
+                        className="px-[10px] py-1 bg-green-600 text-white text-[10px] rounded hover:bg-green-700 transition-colors whitespace-nowrap"
                       >
                         実行予算書
                       </Link>
                       <Link
                         href={`/estimates/${project.id}`}
-                        className="px-3 py-1 bg-orange-600 text-white text-xs rounded hover:bg-orange-700 transition-colors whitespace-nowrap"
+                        className="px-[10px] py-1 bg-orange-600 text-white text-[10px] rounded hover:bg-orange-700 transition-colors whitespace-nowrap"
                       >
                         見積書
                       </Link>
@@ -570,7 +573,7 @@ export default function ProjectsPage() {
                       {user?.role !== '現場メンバー' && (
                         <Link
                           href={`/ledgers/${project.id}`}
-                          className="px-3 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors whitespace-nowrap"
+                          className="px-[10px] py-1 bg-purple-600 text-white text-[10px] rounded hover:bg-purple-700 transition-colors whitespace-nowrap"
                         >
                           工事台帳
                         </Link>

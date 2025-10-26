@@ -250,37 +250,37 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
 
   return (
     <Layout>
-      <div className="p-8 min-w-[1600px]">
+      <div className="p-[26px] min-w-[1280px]">
         {/* ヘッダー */}
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center gap-4">
+        <div className="flex justify-between items-center mb-5">
+          <div className="flex items-center gap-[13px]">
             <button
               onClick={() => router.push('/projects')}
-              className="px-3 py-2 text-gray-600 hover:text-gray-900"
+              className="px-[10px] py-[6px] text-gray-600 hover:text-gray-900"
             >
               ← 戻る
             </button>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-[19px] font-bold text-gray-900">
                 {isNewEstimate ? '工事内訳書作成' : '工事内訳書編集'}
               </h1>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-[11px] text-gray-600 mt-1">
                 {mockProject.projectName}
               </p>
             </div>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-[10px]">
             {!isNewEstimate && (
               <>
                 <button
                   onClick={handleBreakdownPdfExport}
-                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                  className="px-[13px] py-[6px] bg-green-600 text-white rounded-md hover:bg-green-700"
                 >
                   工事内訳書PDF
                 </button>
                 <button
                   onClick={handleQuotePdfExport}
-                  className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700"
+                  className="px-[13px] py-[6px] bg-teal-600 text-white rounded-md hover:bg-teal-700"
                 >
                   見積書PDF
                 </button>
@@ -288,11 +288,11 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
                   <div className="flex flex-col items-end gap-1">
                     <button
                       onClick={handleReflectToBudget}
-                      className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700"
+                      className="px-[13px] py-[6px] bg-orange-600 text-white rounded-md hover:bg-orange-700"
                     >
                       実行予算書へ反映
                     </button>
-                    <p className="text-xs text-gray-500">※外注費用☑に応じて分類</p>
+                    <p className="text-[10px] text-gray-500">※外注費用☑に応じて分類</p>
                   </div>
                 )}
               </>
@@ -303,50 +303,50 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
         {/* 2カラムレイアウト */}
         <div className="flex gap-6">
           {/* 左側：入力フォーム */}
-          <div className="w-3/5 min-w-[960px] space-y-6">
+          <div className="w-3/5 min-w-[960px] space-y-[13px]">
             {/* 基本情報セクション */}
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4 border-b pb-2">基本情報</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-lg shadow p-[13px] mb-[13px]">
+          <h2 className="text-[14px] font-semibold mb-[10px] border-b pb-[6px]">基本情報</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-[10px]">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-[11px] font-medium text-gray-700 mb-1">
                 見積書番号
               </label>
               <input
                 type="text"
                 value={estimate.estimateNumber}
                 disabled
-                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50"
+                className="w-full px-[8px] py-[5px] border border-gray-300 rounded-md bg-gray-50 text-[11px]"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-[11px] font-medium text-gray-700 mb-1">
                 見積日
               </label>
               <input
                 type="date"
                 value={estimate.createdAt}
                 onChange={(e) => handleBasicInfoChange('createdAt', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                className="w-full px-[8px] py-[5px] border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-[11px]"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-[11px] font-medium text-gray-700 mb-1">
                 有効期限
               </label>
               <input
                 type="date"
                 value={estimate.validUntil}
                 onChange={(e) => handleBasicInfoChange('validUntil', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                className="w-full px-[8px] py-[5px] border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-[11px]"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-[11px] font-medium text-gray-700 mb-1">
                 ステータス
               </label>
               <div className="flex items-center h-10">
-                <span className={`px-3 py-1 text-sm font-semibold rounded-full ${getStatusBadge(estimate.status)}`}>
+                <span className={`px-3 py-1 text-[11px] font-semibold rounded-full ${getStatusBadge(estimate.status)}`}>
                   {getStatusLabel(estimate.status)}
                 </span>
               </div>
@@ -355,49 +355,49 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
         </div>
 
         {/* 工事情報セクション */}
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4 border-b pb-2">工事情報</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-lg shadow p-[13px] mb-[13px]">
+          <h2 className="text-[14px] font-semibold mb-[10px] border-b pb-[6px]">工事情報</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-[10px]">
             <div>
-              <p className="text-sm text-gray-600">工事番号</p>
-              <p className="text-sm font-medium">{mockProject.projectNumber}</p>
+              <p className="text-[11px] text-gray-600">工事番号</p>
+              <p className="text-[11px] font-medium">{mockProject.projectNumber}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">工事名</p>
-              <p className="text-sm font-medium">{mockProject.projectName}</p>
+              <p className="text-[11px] text-gray-600">工事名</p>
+              <p className="text-[11px] font-medium">{mockProject.projectName}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">工事場所</p>
-              <p className="text-sm font-medium">{mockProject.location}</p>
+              <p className="text-[11px] text-gray-600">工事場所</p>
+              <p className="text-[11px] font-medium">{mockProject.location}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">受注先</p>
-              <p className="text-sm font-medium">{mockProject.client}</p>
+              <p className="text-[11px] text-gray-600">受注先</p>
+              <p className="text-[11px] font-medium">{mockProject.client}</p>
             </div>
           </div>
         </div>
 
         {/* 過去の見積もりからコピーボタン */}
-        <div className="mb-6">
+        <div className="mb-[13px]">
           <button
             onClick={() => setIsCopyModalOpen(true)}
-            className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
+            className="px-[13px] py-[6px] bg-purple-600 text-white rounded-md hover:bg-purple-700 text-[11px]"
           >
             📋 過去の見積もりからコピー
           </button>
         </div>
 
         {/* 明細入力セクション */}
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4 border-b pb-2">明細入力</h2>
+        <div className="bg-white rounded-lg shadow p-[13px] mb-[13px]">
+          <h2 className="text-[14px] font-semibold mb-[10px] border-b pb-[6px]">明細入力</h2>
 
           {/* タブ */}
-          <div className="flex border-b mb-4">
+          <div className="flex border-b mb-[10px]">
             {(Object.keys(tabNames) as TabType[]).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 font-medium transition-colors ${
+                className={`px-[13px] py-[8px] text-[11px] font-medium transition-colors ${
                   activeTab === tab
                     ? 'border-b-2 border-blue-600 text-blue-600'
                     : 'text-gray-600 hover:text-gray-900'
@@ -409,11 +409,11 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
           </div>
 
           {/* 外注費用チェックボックスの説明 */}
-          <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-            <p className="text-sm text-blue-800">
+          <div className="mb-[10px] p-[10px] bg-blue-50 border border-blue-200 rounded-md">
+            <p className="text-[11px] text-blue-800">
               💡 <strong>外注費用☑について：</strong> チェックを入れた項目は、実行予算書への反映時に「外注費」として分類されます。
             </p>
-            <p className="text-xs text-blue-700 mt-1">
+            <p className="text-[10px] text-blue-700 mt-1">
               ※ 材料費タブ：☑OFF→材料費、☑ON→外注費 ／ 工事費および人件費タブ：☑OFF→労務費、☑ON→外注費
             </p>
           </div>
@@ -423,70 +423,70 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase w-12">NO</th>
-                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">品名</th>
-                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase">規格</th>
-                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase w-24">数量</th>
-                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase w-24">単位</th>
-                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase w-32">単価</th>
-                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase w-32">小計</th>
-                  <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase w-20">外注費用</th>
-                  <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase w-16">操作</th>
+                  <th className="px-[8px] py-[8px] text-left text-[10px] font-medium text-gray-500 uppercase w-12">NO</th>
+                  <th className="px-[8px] py-[8px] text-left text-[10px] font-medium text-gray-500 uppercase">品名</th>
+                  <th className="px-[8px] py-[8px] text-left text-[10px] font-medium text-gray-500 uppercase">規格</th>
+                  <th className="px-[8px] py-[8px] text-left text-[10px] font-medium text-gray-500 uppercase w-16">数量</th>
+                  <th className="px-[8px] py-[8px] text-left text-[10px] font-medium text-gray-500 uppercase w-16">単位</th>
+                  <th className="px-[8px] py-[8px] text-left text-[10px] font-medium text-gray-500 uppercase w-32">単価</th>
+                  <th className="px-[8px] py-[8px] text-left text-[10px] font-medium text-gray-500 uppercase w-24">小計</th>
+                  <th className="px-[8px] py-[8px] text-center text-[10px] font-medium text-gray-500 uppercase w-20">外注費用</th>
+                  <th className="px-[8px] py-[8px] text-center text-[10px] font-medium text-gray-500 uppercase w-16">操作</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {estimate[activeTab].map((item, index) => (
                   <tr key={item.id}>
-                    <td className="px-3 py-3 text-sm text-gray-500">{index + 1}</td>
-                    <td className="px-3 py-3">
+                    <td className="px-[8px] py-[6px] text-[11px] text-gray-500">{index + 1}</td>
+                    <td className="px-[8px] py-[6px]">
                       <input
                         type="text"
                         value={item.name}
                         onChange={(e) => updateItem(activeTab, item.id, 'name', e.target.value)}
-                        className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-[5px] py-[3px] border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-[11px]"
                         placeholder="品名"
                       />
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-[8px] py-[6px]">
                       <input
                         type="text"
                         value={item.specification}
                         onChange={(e) => updateItem(activeTab, item.id, 'specification', e.target.value)}
-                        className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-[5px] py-[3px] border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-[11px]"
                         placeholder="規格"
                       />
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-[8px] py-[6px]">
                       <input
                         type="number"
                         value={item.quantity || ''}
                         onChange={(e) => updateItem(activeTab, item.id, 'quantity', parseFloat(e.target.value) || 0)}
-                        className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-[5px] py-[3px] border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-[11px]"
                         placeholder="0"
                       />
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-[8px] py-[6px]">
                       <input
                         type="text"
                         value={item.unit}
                         onChange={(e) => updateItem(activeTab, item.id, 'unit', e.target.value)}
-                        className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-[5px] py-[3px] border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-[11px]"
                         placeholder="単位"
                       />
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="px-[8px] py-[6px]">
                       <input
                         type="number"
                         value={item.unitPrice || ''}
                         onChange={(e) => updateItem(activeTab, item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
-                        className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-[5px] py-[3px] border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 text-[11px]"
                         placeholder="0"
                       />
                     </td>
-                    <td className="px-3 py-3 text-sm font-medium">
+                    <td className="px-[8px] py-[6px] text-[11px] font-medium">
                       ¥{item.subtotal.toLocaleString()}
                     </td>
-                    <td className="px-3 py-3 text-center">
+                    <td className="px-[8px] py-[6px] text-center">
                       <input
                         type="checkbox"
                         checked={item.isSubcontracting}
@@ -494,10 +494,10 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
                         className="w-4 h-4 text-orange-600 focus:ring-2 focus:ring-orange-500"
                       />
                     </td>
-                    <td className="px-3 py-3 text-center">
+                    <td className="px-[8px] py-[6px] text-center">
                       <button
                         onClick={() => removeRow(activeTab, item.id)}
-                        className="text-red-600 hover:text-red-900"
+                        className="text-red-600 hover:text-red-900 text-[10px]"
                       >
                         削除
                       </button>
@@ -507,10 +507,10 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
                 {/* 合計行 */}
                 {estimate[activeTab].length > 0 && (
                   <tr className="bg-gray-50 border-t-2 border-gray-300">
-                    <td colSpan={6} className="px-3 py-3 text-sm font-semibold text-right">
+                    <td colSpan={6} className="px-[8px] py-[6px] text-[11px] font-semibold text-right">
                       {tabNames[activeTab]}合計
                     </td>
-                    <td className="px-3 py-3 text-sm font-bold text-blue-600">
+                    <td className="px-[8px] py-[6px] text-[11px] font-bold text-blue-600">
                       ¥{(activeTab === 'materials' ? estimate.materialsTotal : estimate.laborAndConstructionTotal).toLocaleString()}
                     </td>
                     <td colSpan={2}></td>
@@ -521,10 +521,10 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
           </div>
 
           {/* 行追加ボタン */}
-          <div className="mt-4">
+          <div className="mt-[10px]">
             <button
               onClick={() => addRow(activeTab)}
-              className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+              className="w-full px-[13px] py-[6px] bg-green-600 text-white rounded-md hover:bg-green-700 text-[11px]"
             >
               + 行を追加
             </button>
@@ -532,94 +532,94 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
         </div>
 
         {/* 備考セクション */}
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4 border-b pb-2">備考</h2>
+        <div className="bg-white rounded-lg shadow p-[13px] mb-[13px]">
+          <h2 className="text-[14px] font-semibold mb-[10px] border-b pb-[6px]">備考</h2>
           <textarea
             value={estimate.remarks}
             onChange={(e) => handleBasicInfoChange('remarks', e.target.value)}
-            rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+            rows={2}
+            className="w-full px-[8px] py-[5px] border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-[11px]"
             placeholder="備考を入力してください"
           />
         </div>
 
         {/* 値引き入力セクション */}
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4 border-b pb-2">値引き</h2>
-          <div className="space-y-3">
-            <div className="flex items-center gap-4">
-              <label className="text-sm font-medium text-gray-700 w-24">値引き名称</label>
+        <div className="bg-white rounded-lg shadow p-[13px] mb-[13px]">
+          <h2 className="text-[14px] font-semibold mb-[10px] border-b pb-[6px]">値引き</h2>
+          <div className="space-y-[10px]">
+            <div className="flex items-center gap-[10px]">
+              <label className="text-[11px] font-medium text-gray-700 w-24">値引き名称</label>
               <input
                 type="text"
                 value={estimate.discountLabel}
                 onChange={(e) => handleBasicInfoChange('discountLabel', e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                className="px-[8px] py-[5px] border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-[11px]"
                 placeholder="値引き"
               />
             </div>
-            <div className="flex items-center gap-4">
-              <label className="text-sm font-medium text-gray-700 w-24">値引き額</label>
+            <div className="flex items-center gap-[10px]">
+              <label className="text-[11px] font-medium text-gray-700 w-24">値引き額</label>
               <input
                 type="number"
                 value={estimate.discount || ''}
                 onChange={(e) => handleBasicInfoChange('discount', parseFloat(e.target.value) || 0)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                className="px-[8px] py-[5px] border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-[11px]"
                 placeholder="0"
               />
-              <span className="text-sm text-gray-600">円</span>
+              <span className="text-[11px] text-gray-600">円</span>
             </div>
           </div>
-          <p className="text-xs text-gray-500 mt-2">
+          <p className="text-[10px] text-gray-500 mt-2">
             ※ 値引き時の実行予算書への反映方法は、お客様と相談の上で決定します
           </p>
         </div>
 
         {/* サマリーセクション */}
-        <div className="bg-white rounded-lg shadow p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4 border-b pb-2">金額サマリー</h2>
-          <div className="space-y-2">
+        <div className="bg-white rounded-lg shadow p-[13px] mb-[13px]">
+          <h2 className="text-[14px] font-semibold mb-[10px] border-b pb-[6px]">金額サマリー</h2>
+          <div className="space-y-[6px]">
             <div className="flex justify-between">
-              <span className="text-gray-900 font-medium">合計（税別）</span>
-              <span className="font-bold">¥{estimate.subtotal.toLocaleString()}</span>
+              <span className="text-[13px] text-gray-900 font-medium">合計（税別）</span>
+              <span className="text-[13px] font-bold">¥{estimate.subtotal.toLocaleString()}</span>
             </div>
             {estimate.discount > 0 && (
               <>
                 <div className="flex justify-between">
-                  <span className="text-gray-900 font-medium">{estimate.discountLabel}</span>
-                  <span className="font-bold text-red-600">-¥{estimate.discount.toLocaleString()}</span>
+                  <span className="text-[13px] text-gray-900 font-medium">{estimate.discountLabel}</span>
+                  <span className="text-[13px] font-bold text-red-600">-¥{estimate.discount.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between border-t pt-2">
-                  <span className="text-gray-900 font-medium">値引後小計</span>
-                  <span className="font-bold">¥{estimate.discountedSubtotal.toLocaleString()}</span>
+                <div className="flex justify-between border-t pt-[6px]">
+                  <span className="text-[13px] text-gray-900 font-medium">値引後小計</span>
+                  <span className="text-[13px] font-bold">¥{estimate.discountedSubtotal.toLocaleString()}</span>
                 </div>
               </>
             )}
             <div className="flex justify-between">
-              <span className="text-gray-600">消費税（10%）</span>
-              <span className="font-medium">¥{estimate.tax.toLocaleString()}</span>
+              <span className="text-[13px] text-gray-600">消費税（10%）</span>
+              <span className="text-[13px] font-medium">¥{estimate.tax.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between pt-2 border-t-2">
-              <span className="text-xl font-bold text-gray-900">合計金額</span>
-              <span className="text-2xl font-bold text-blue-600">¥{estimate.total.toLocaleString()}</span>
+            <div className="flex justify-between pt-[6px] border-t-2">
+              <span className="text-[16px] font-bold text-gray-900">合計金額</span>
+              <span className="text-[19px] font-bold text-blue-600">¥{estimate.total.toLocaleString()}</span>
             </div>
           </div>
         </div>
 
             {/* アクションボタン */}
-            <div className="flex justify-end gap-3">
+            <div className="flex justify-end gap-[10px]">
               {isNewEstimate ? (
                 <>
                   <button
                     onClick={() => handleSave('draft')}
                     disabled={isSaving}
-                    className="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 disabled:bg-gray-400"
+                    className="px-[13px] py-[6px] bg-gray-600 text-white rounded-md hover:bg-gray-700 disabled:bg-gray-400 text-[11px]"
                   >
                     {isSaving ? '保存中...' : '下書き保存'}
                   </button>
                   <button
                     onClick={() => handleSave('confirmed')}
                     disabled={isSaving}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-400"
+                    className="px-[13px] py-[6px] bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-400 text-[11px]"
                   >
                     {isSaving ? '保存中...' : '確定'}
                   </button>
@@ -630,7 +630,7 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
                     value={estimate.status}
                     onChange={(e) => setEstimate((prev) => ({ ...prev, status: e.target.value as EstimateStatus }))}
                     disabled={estimate.status === 'reflected'}
-                    className="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                    className="px-[13px] py-[6px] border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 text-[11px]"
                   >
                     <option value="draft">下書き</option>
                     <option value="confirmed">確定</option>
@@ -639,7 +639,7 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
                   <button
                     onClick={() => handleSave()}
                     disabled={isSaving}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-400"
+                    className="px-[13px] py-[6px] bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-400 text-[11px]"
                   >
                     {isSaving ? '保存中...' : '保存'}
                   </button>
@@ -649,12 +649,12 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
           </div>
 
           {/* 右側：プレビュー（2タブ切り替え） */}
-          <div className="w-2/5 min-w-[616px] sticky top-8 self-start">
+          <div className="w-2/5 min-w-[493px] sticky top-[26px] self-start">
             {/* プレビュータブ */}
             <div className="flex border-b mb-4 bg-white shadow-sm">
               <button
                 onClick={() => setPreviewMode('breakdown')}
-                className={`flex-1 px-6 py-3 font-medium transition-colors ${
+                className={`flex-1 px-5 py-[10px] font-medium transition-colors ${
                   previewMode === 'breakdown'
                     ? 'border-b-2 border-green-600 text-green-600 bg-green-50'
                     : 'text-gray-600 hover:text-gray-900'
@@ -664,7 +664,7 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
               </button>
               <button
                 onClick={() => setPreviewMode('quote')}
-                className={`flex-1 px-6 py-3 font-medium transition-colors ${
+                className={`flex-1 px-5 py-[10px] font-medium transition-colors ${
                   previewMode === 'quote'
                     ? 'border-b-2 border-blue-600 text-blue-600 bg-blue-50'
                     : 'text-gray-600 hover:text-gray-900'
@@ -675,44 +675,44 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
             </div>
 
             {/* プレビュー内容（A4サイズ固定） */}
-            <div className="bg-white shadow-lg" style={{ width: '210mm', minHeight: '297mm', padding: '15mm' }}>
+            <div className="bg-white shadow-lg" style={{ width: '168mm', minHeight: '238mm', padding: '12mm' }}>
 
               {/* 工事内訳書プレビュー */}
               {previewMode === 'breakdown' && (
                 <>
                   {/* タイトル */}
-                  <h1 className="text-center text-2xl font-bold mb-6">工事内訳書</h1>
+                  <h1 className="text-center text-[19px] font-bold mb-5">工事内訳書</h1>
 
                   {/* 材料費明細 */}
                   {estimate.materials.length > 0 && (
-                    <div className="mb-4">
-                      <h4 className="font-semibold text-sm text-gray-900 mb-2 bg-blue-50 px-2 py-1 rounded">【材料費】</h4>
-                      <table className="w-full text-xs border-collapse">
+                    <div className="mb-[13px]">
+                      <h4 className="font-semibold text-[11px] text-gray-900 mb-[6px] bg-blue-50 px-[6px] py-1 rounded">【材料費】</h4>
+                      <table className="w-full text-[10px] border-collapse">
                         <thead>
                           <tr className="bg-gray-100">
-                            <th className="border border-gray-300 px-2 py-1 text-left">品名</th>
-                            <th className="border border-gray-300 px-2 py-1 text-left">規格</th>
-                            <th className="border border-gray-300 px-2 py-1 text-center">数量</th>
-                            <th className="border border-gray-300 px-2 py-1 text-center">単位</th>
-                            <th className="border border-gray-300 px-2 py-1 text-right">単価</th>
-                            <th className="border border-gray-300 px-2 py-1 text-right">小計</th>
+                            <th className="border border-gray-300 px-[6px] py-1 text-left">品名</th>
+                            <th className="border border-gray-300 px-[6px] py-1 text-left">規格</th>
+                            <th className="border border-gray-300 px-[6px] py-1 text-center">数量</th>
+                            <th className="border border-gray-300 px-[6px] py-1 text-center">単位</th>
+                            <th className="border border-gray-300 px-[6px] py-1 text-right">単価</th>
+                            <th className="border border-gray-300 px-[6px] py-1 text-right">小計</th>
                           </tr>
                         </thead>
                         <tbody>
                           {estimate.materials.map((item) => (
                             <tr key={item.id}>
-                              <td className="border border-gray-300 px-2 py-1">{item.name || '-'}</td>
-                              <td className="border border-gray-300 px-2 py-1">{item.specification || '-'}</td>
-                              <td className="border border-gray-300 px-2 py-1 text-center">{item.quantity}</td>
-                              <td className="border border-gray-300 px-2 py-1 text-center">{item.unit}</td>
-                              <td className="border border-gray-300 px-2 py-1 text-right">¥{item.unitPrice.toLocaleString()}</td>
-                              <td className="border border-gray-300 px-2 py-1 text-right font-medium">¥{item.subtotal.toLocaleString()}</td>
+                              <td className="border border-gray-300 px-[6px] py-1">{item.name || '-'}</td>
+                              <td className="border border-gray-300 px-[6px] py-1">{item.specification || '-'}</td>
+                              <td className="border border-gray-300 px-[6px] py-1 text-center">{item.quantity}</td>
+                              <td className="border border-gray-300 px-[6px] py-1 text-center">{item.unit}</td>
+                              <td className="border border-gray-300 px-[6px] py-1 text-right">¥{item.unitPrice.toLocaleString()}</td>
+                              <td className="border border-gray-300 px-[6px] py-1 text-right font-medium">¥{item.subtotal.toLocaleString()}</td>
                             </tr>
                           ))}
                           {/* 合計行 */}
                           <tr className="bg-gray-50 border-t-2 border-gray-300">
-                            <td colSpan={5} className="border border-gray-300 px-2 py-1 text-right font-semibold">材料費合計</td>
-                            <td className="border border-gray-300 px-2 py-1 text-right font-bold text-blue-600">¥{estimate.materialsTotal.toLocaleString()}</td>
+                            <td colSpan={5} className="border border-gray-300 px-[6px] py-1 text-right font-semibold">材料費合計</td>
+                            <td className="border border-gray-300 px-[6px] py-1 text-right font-bold text-blue-600">¥{estimate.materialsTotal.toLocaleString()}</td>
                           </tr>
                         </tbody>
                       </table>
@@ -722,33 +722,33 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
                   {/* 工事費および人件費明細 */}
                   {estimate.laborAndConstruction.length > 0 && (
                     <div className="mb-4">
-                      <h4 className="font-semibold text-sm text-gray-900 mb-2 bg-green-50 px-2 py-1 rounded">【工事費および人件費】</h4>
+                      <h4 className="font-semibold text-sm text-gray-900 mb-2 bg-green-50 px-[6px] py-1 rounded">【工事費および人件費】</h4>
                       <table className="w-full text-xs border-collapse">
                         <thead>
                           <tr className="bg-gray-100">
-                            <th className="border border-gray-300 px-2 py-1 text-left">品名</th>
-                            <th className="border border-gray-300 px-2 py-1 text-left">規格</th>
-                            <th className="border border-gray-300 px-2 py-1 text-center">数量</th>
-                            <th className="border border-gray-300 px-2 py-1 text-center">単位</th>
-                            <th className="border border-gray-300 px-2 py-1 text-right">単価</th>
-                            <th className="border border-gray-300 px-2 py-1 text-right">小計</th>
+                            <th className="border border-gray-300 px-[6px] py-1 text-left">品名</th>
+                            <th className="border border-gray-300 px-[6px] py-1 text-left">規格</th>
+                            <th className="border border-gray-300 px-[6px] py-1 text-center">数量</th>
+                            <th className="border border-gray-300 px-[6px] py-1 text-center">単位</th>
+                            <th className="border border-gray-300 px-[6px] py-1 text-right">単価</th>
+                            <th className="border border-gray-300 px-[6px] py-1 text-right">小計</th>
                           </tr>
                         </thead>
                         <tbody>
                           {estimate.laborAndConstruction.map((item) => (
                             <tr key={item.id}>
-                              <td className="border border-gray-300 px-2 py-1">{item.name || '-'}</td>
-                              <td className="border border-gray-300 px-2 py-1">{item.specification || '-'}</td>
-                              <td className="border border-gray-300 px-2 py-1 text-center">{item.quantity}</td>
-                              <td className="border border-gray-300 px-2 py-1 text-center">{item.unit}</td>
-                              <td className="border border-gray-300 px-2 py-1 text-right">¥{item.unitPrice.toLocaleString()}</td>
-                              <td className="border border-gray-300 px-2 py-1 text-right font-medium">¥{item.subtotal.toLocaleString()}</td>
+                              <td className="border border-gray-300 px-[6px] py-1">{item.name || '-'}</td>
+                              <td className="border border-gray-300 px-[6px] py-1">{item.specification || '-'}</td>
+                              <td className="border border-gray-300 px-[6px] py-1 text-center">{item.quantity}</td>
+                              <td className="border border-gray-300 px-[6px] py-1 text-center">{item.unit}</td>
+                              <td className="border border-gray-300 px-[6px] py-1 text-right">¥{item.unitPrice.toLocaleString()}</td>
+                              <td className="border border-gray-300 px-[6px] py-1 text-right font-medium">¥{item.subtotal.toLocaleString()}</td>
                             </tr>
                           ))}
                           {/* 合計行 */}
                           <tr className="bg-gray-50 border-t-2 border-gray-300">
-                            <td colSpan={5} className="border border-gray-300 px-2 py-1 text-right font-semibold">工事費および人件費合計</td>
-                            <td className="border border-gray-300 px-2 py-1 text-right font-bold text-blue-600">¥{estimate.laborAndConstructionTotal.toLocaleString()}</td>
+                            <td colSpan={5} className="border border-gray-300 px-[6px] py-1 text-right font-semibold">工事費および人件費合計</td>
+                            <td className="border border-gray-300 px-[6px] py-1 text-right font-bold text-blue-600">¥{estimate.laborAndConstructionTotal.toLocaleString()}</td>
                           </tr>
                         </tbody>
                       </table>
@@ -770,15 +770,15 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
                       {/* 左側：発注者情報 */}
                       <div className="text-sm" style={{ width: '48%' }}>
                         <div className="font-bold text-base mb-2">{mockProject.client} 御中</div>
-                        <div className="text-xs mb-1">123-4567</div>
-                        <div className="text-xs mb-1">東京都千代田区丸の内1-1-1</div>
+                        <div className="text-[10px] mb-1">123-4567</div>
+                        <div className="text-[10px] mb-1">東京都千代田区丸の内1-1-1</div>
                         <div className="text-xs">代表取締役 山田 太郎</div>
                       </div>
 
                       {/* 右側：日付情報 + 受注者情報 */}
                       <div style={{ width: '48%' }}>
                         {/* 日付情報 */}
-                        <div className="text-xs mb-6 pl-16">
+                        <div className="text-[10px] mb-6 pl-16">
                           <div className="mb-1 flex justify-between">
                             <span>見積書番号</span>
                             <span>{estimate.estimateNumber}</span>
@@ -794,7 +794,7 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
                         </div>
 
                         {/* 受注者情報 */}
-                        <div className="text-xs mt-12 pl-16">
+                        <div className="text-[10px] mt-12 pl-16">
                           <div className="font-bold text-sm mb-2">株式会社永伸</div>
                           <div className="mb-1">860-0074</div>
                           <div className="mb-1">熊本県熊本市西区出町1-3</div>
@@ -820,36 +820,36 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
                     <table className="border-collapse text-xs mb-6" style={{ width: '70%' }}>
                       <thead>
                         <tr className="bg-gray-100">
-                          <th className="border border-gray-300 px-2 py-1 text-left">合計（税別）</th>
+                          <th className="border border-gray-300 px-[6px] py-1 text-left">合計（税別）</th>
                           {estimate.discount > 0 && (
                             <>
-                              <th className="border border-gray-300 px-2 py-1 text-left">{estimate.discountLabel}</th>
-                              <th className="border border-gray-300 px-2 py-1 text-left">値引後小計</th>
+                              <th className="border border-gray-300 px-[6px] py-1 text-left">{estimate.discountLabel}</th>
+                              <th className="border border-gray-300 px-[6px] py-1 text-left">値引後小計</th>
                             </>
                           )}
-                          <th className="border border-gray-300 px-2 py-1 text-left">消費税</th>
-                          <th className="border border-gray-300 px-2 py-1 text-left">合計金額(税込)</th>
+                          <th className="border border-gray-300 px-[6px] py-1 text-left">消費税</th>
+                          <th className="border border-gray-300 px-[6px] py-1 text-left">合計金額(税込)</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <td className="border border-gray-300 px-2 py-1 text-right font-medium">
+                          <td className="border border-gray-300 px-[6px] py-1 text-right font-medium">
                             {estimate.subtotal.toLocaleString()}円
                           </td>
                           {estimate.discount > 0 && (
                             <>
-                              <td className="border border-gray-300 px-2 py-1 text-right font-medium text-red-600">
+                              <td className="border border-gray-300 px-[6px] py-1 text-right font-medium text-red-600">
                                 {estimate.discount.toLocaleString()}円
                               </td>
-                              <td className="border border-gray-300 px-2 py-1 text-right font-medium">
+                              <td className="border border-gray-300 px-[6px] py-1 text-right font-medium">
                                 {estimate.discountedSubtotal.toLocaleString()}円
                               </td>
                             </>
                           )}
-                          <td className="border border-gray-300 px-2 py-1 text-right font-medium">
+                          <td className="border border-gray-300 px-[6px] py-1 text-right font-medium">
                             {estimate.tax.toLocaleString()}円
                           </td>
-                          <td className="border border-gray-300 px-2 py-1 text-right font-bold">
+                          <td className="border border-gray-300 px-[6px] py-1 text-right font-bold">
                             {estimate.total.toLocaleString()}円
                           </td>
                         </tr>
@@ -868,10 +868,10 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
                       </colgroup>
                       <thead>
                         <tr className="bg-gray-100">
-                          <th className="border border-gray-300 px-2 py-1 text-left">費目</th>
-                          <th className="border border-gray-300 px-2 py-1 text-center">数量</th>
-                          <th className="border border-gray-300 px-2 py-1 text-center">単位</th>
-                          <th className="border border-gray-300 px-2 py-1 text-right">金額</th>
+                          <th className="border border-gray-300 px-[6px] py-1 text-left">費目</th>
+                          <th className="border border-gray-300 px-[6px] py-1 text-center">数量</th>
+                          <th className="border border-gray-300 px-[6px] py-1 text-center">単位</th>
+                          <th className="border border-gray-300 px-[6px] py-1 text-right">金額</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -885,10 +885,10 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
                                 <>
                                   {(() => { displayedRows++; return null; })()}
                                   <tr>
-                                    <td className="border border-gray-300 px-2 py-1">材料費</td>
-                                    <td className="border border-gray-300 px-2 py-1 text-center">1</td>
-                                    <td className="border border-gray-300 px-2 py-1 text-center">式</td>
-                                    <td className="border border-gray-300 px-2 py-1 text-right font-medium">
+                                    <td className="border border-gray-300 px-[6px] py-1">材料費</td>
+                                    <td className="border border-gray-300 px-[6px] py-1 text-center">1</td>
+                                    <td className="border border-gray-300 px-[6px] py-1 text-center">式</td>
+                                    <td className="border border-gray-300 px-[6px] py-1 text-right font-medium">
                                       ¥{estimate.materialsTotal.toLocaleString()}
                                     </td>
                                   </tr>
@@ -899,10 +899,10 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
                                 <>
                                   {(() => { displayedRows++; return null; })()}
                                   <tr>
-                                    <td className="border border-gray-300 px-2 py-1">工事費および人件費</td>
-                                    <td className="border border-gray-300 px-2 py-1 text-center">1</td>
-                                    <td className="border border-gray-300 px-2 py-1 text-center">式</td>
-                                    <td className="border border-gray-300 px-2 py-1 text-right font-medium">
+                                    <td className="border border-gray-300 px-[6px] py-1">工事費および人件費</td>
+                                    <td className="border border-gray-300 px-[6px] py-1 text-center">1</td>
+                                    <td className="border border-gray-300 px-[6px] py-1 text-center">式</td>
+                                    <td className="border border-gray-300 px-[6px] py-1 text-right font-medium">
                                       ¥{estimate.laborAndConstructionTotal.toLocaleString()}
                                     </td>
                                   </tr>
@@ -913,10 +913,10 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
                                 <>
                                   {(() => { displayedRows++; return null; })()}
                                   <tr>
-                                    <td className="border border-gray-300 px-2 py-1">{estimate.discountLabel}</td>
-                                    <td className="border border-gray-300 px-2 py-1 text-center">1</td>
-                                    <td className="border border-gray-300 px-2 py-1 text-center">式</td>
-                                    <td className="border border-gray-300 px-2 py-1 text-right font-medium text-red-600">
+                                    <td className="border border-gray-300 px-[6px] py-1">{estimate.discountLabel}</td>
+                                    <td className="border border-gray-300 px-[6px] py-1 text-center">1</td>
+                                    <td className="border border-gray-300 px-[6px] py-1 text-center">式</td>
+                                    <td className="border border-gray-300 px-[6px] py-1 text-right font-medium text-red-600">
                                       -¥{estimate.discount.toLocaleString()}
                                     </td>
                                   </tr>
@@ -925,10 +925,10 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
                               {/* 空行（10行になるように調整） */}
                               {Array.from({ length: 10 - displayedRows }).map((_, index) => (
                                 <tr key={`empty-${index}`}>
-                                  <td className="border border-gray-300 px-2 py-1">{'\u00A0'}</td>
-                                  <td className="border border-gray-300 px-2 py-1 text-center">{'\u00A0'}</td>
-                                  <td className="border border-gray-300 px-2 py-1 text-center">{'\u00A0'}</td>
-                                  <td className="border border-gray-300 px-2 py-1 text-right">{'\u00A0'}</td>
+                                  <td className="border border-gray-300 px-[6px] py-1">{'\u00A0'}</td>
+                                  <td className="border border-gray-300 px-[6px] py-1 text-center">{'\u00A0'}</td>
+                                  <td className="border border-gray-300 px-[6px] py-1 text-center">{'\u00A0'}</td>
+                                  <td className="border border-gray-300 px-[6px] py-1 text-right">{'\u00A0'}</td>
                                 </tr>
                               ))}
                             </>
@@ -1008,7 +1008,7 @@ export default function EstimatePage({ params }: { params: Promise<{ projectId: 
             <div className="p-4 border-t flex justify-end">
               <button
                 onClick={() => setIsCopyModalOpen(false)}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+                className="px-[13px] py-[6px] bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
               >
                 キャンセル
               </button>

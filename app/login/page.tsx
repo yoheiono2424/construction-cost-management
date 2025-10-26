@@ -44,20 +44,20 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow">
+      <div className="max-w-[460px] w-full space-y-[26px] p-[26px] bg-white rounded-lg shadow">
         <div>
-          <h2 className="text-center text-3xl font-bold text-gray-900">
+          <h2 className="text-center text-[19px] font-bold text-gray-900 whitespace-nowrap">
             建設業向け原価管理システム
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-[6px] text-center text-[11px] text-gray-600">
             アカウントにログインしてください
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
+        <form className="mt-[26px] space-y-5" onSubmit={handleSubmit}>
+          <div className="space-y-[13px]">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-[11px] font-medium text-gray-700">
                 メールアドレス
               </label>
               <input
@@ -66,7 +66,7 @@ export default function LoginPage() {
                 type="email"
                 autoComplete="email"
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-[10px] py-[6px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="example@company.com"
@@ -74,7 +74,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-[11px] font-medium text-gray-700">
                 パスワード
               </label>
               <input
@@ -83,7 +83,7 @@ export default function LoginPage() {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-[10px] py-[6px] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
@@ -92,7 +92,7 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div className="text-red-600 text-sm text-center">
+            <div className="text-red-600 text-[11px] text-center">
               {error}
             </div>
           )}
@@ -100,60 +100,60 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400"
+            className="w-full flex justify-center py-[6px] px-[13px] border border-transparent rounded-md shadow-sm text-[11px] font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400"
           >
             {isLoading ? 'ログイン中...' : 'ログイン'}
           </button>
 
-          <div className="mt-6 text-sm text-gray-600 bg-gray-50 p-4 rounded-md">
-            <p className="font-semibold mb-2">テスト用アカウント: <span className="text-xs font-normal text-gray-500">（クリックで自動入力）</span></p>
+          <div className="mt-5 text-[11px] text-gray-600 bg-gray-50 p-[13px] rounded-md">
+            <p className="font-semibold mb-[6px]">テスト用アカウント: <span className="text-[10px] font-normal text-gray-500">（クリックで自動入力）</span></p>
             <div className="space-y-1">
               <button
                 type="button"
                 onClick={() => fillTestAccount('president@example.com', 'password')}
-                className="w-full flex items-center p-2 rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
+                className="w-full flex items-center p-[6px] rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
               >
-                <span className="inline-block w-20 px-2 py-0.5 text-xs bg-purple-100 text-purple-800 rounded mr-2">社長</span>
+                <span className="inline-block w-16 px-[6px] py-[2px] text-[10px] bg-purple-100 text-purple-800 rounded mr-[6px]">社長</span>
                 president@example.com / password
               </button>
               <button
                 type="button"
                 onClick={() => fillTestAccount('director@example.com', 'password')}
-                className="w-full flex items-center p-2 rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
+                className="w-full flex items-center p-[6px] rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
               >
-                <span className="inline-block w-20 px-2 py-0.5 text-xs bg-indigo-100 text-indigo-800 rounded mr-2">常務</span>
+                <span className="inline-block w-16 px-[6px] py-[2px] text-[10px] bg-indigo-100 text-indigo-800 rounded mr-[6px]">常務</span>
                 director@example.com / password
               </button>
               <button
                 type="button"
                 onClick={() => fillTestAccount('manager@example.com', 'password')}
-                className="w-full flex items-center p-2 rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
+                className="w-full flex items-center p-[6px] rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
               >
-                <span className="inline-block w-20 px-2 py-0.5 text-xs bg-blue-100 text-blue-800 rounded mr-2">部長</span>
+                <span className="inline-block w-16 px-[6px] py-[2px] text-[10px] bg-blue-100 text-blue-800 rounded mr-[6px]">部長</span>
                 manager@example.com / password
               </button>
               <button
                 type="button"
                 onClick={() => fillTestAccount('admin@example.com', 'password')}
-                className="w-full flex items-center p-2 rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
+                className="w-full flex items-center p-[6px] rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
               >
-                <span className="inline-block w-20 px-2 py-0.5 text-xs bg-green-100 text-green-800 rounded mr-2">管理者</span>
+                <span className="inline-block w-16 px-[6px] py-[2px] text-[10px] bg-green-100 text-green-800 rounded mr-[6px]">管理者</span>
                 admin@example.com / password
               </button>
               <button
                 type="button"
                 onClick={() => fillTestAccount('registrar@example.com', 'password')}
-                className="w-full flex items-center p-2 rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
+                className="w-full flex items-center p-[6px] rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
               >
-                <span className="inline-block w-20 px-2 py-0.5 text-xs bg-yellow-100 text-yellow-800 rounded mr-2">案件登録者</span>
+                <span className="inline-block w-16 px-[6px] py-[2px] text-[10px] bg-yellow-100 text-yellow-800 rounded mr-[6px]">案件登録者</span>
                 registrar@example.com / password
               </button>
               <button
                 type="button"
                 onClick={() => fillTestAccount('member@example.com', 'password')}
-                className="w-full flex items-center p-2 rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
+                className="w-full flex items-center p-[6px] rounded hover:bg-gray-100 transition-colors cursor-pointer text-left"
               >
-                <span className="inline-block w-20 px-2 py-0.5 text-xs bg-gray-100 text-gray-800 rounded mr-2">現場メンバー</span>
+                <span className="inline-block w-16 px-[6px] py-[2px] text-[10px] bg-gray-100 text-gray-800 rounded mr-[6px]">現場メンバー</span>
                 member@example.com / password
               </button>
             </div>

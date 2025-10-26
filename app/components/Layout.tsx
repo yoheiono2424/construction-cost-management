@@ -187,19 +187,19 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* サイドバー */}
-      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 w-64 min-w-64 bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out shadow-lg flex-shrink-0`}>
+      <aside className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 w-[205px] min-w-[205px] bg-white border-r border-gray-200 transition-transform duration-300 ease-in-out shadow-lg flex-shrink-0`}>
         <div className="flex flex-col h-full">
           {/* ロゴ/タイトル */}
-          <div className="flex items-center h-16 px-6 bg-gradient-to-r from-blue-600 to-blue-700">
-            <h1 className="text-xl font-bold text-white">原価管理システム</h1>
+          <div className="flex items-center h-[51px] px-5 bg-gradient-to-r from-blue-600 to-blue-700">
+            <h1 className="text-[16px] font-bold text-white">原価管理システム</h1>
           </div>
 
           {/* ユーザー情報 */}
-          <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
-            <p className="text-sm text-gray-600">ログイン中</p>
+          <div className="px-5 py-[13px] bg-gray-50 border-b border-gray-200">
+            <p className="text-[11px] text-gray-600">ログイン中</p>
             <p className="text-gray-900 font-medium">{user?.name}</p>
             {user?.role && (
-              <span className={`inline-block mt-1 px-2 py-1 text-xs rounded font-medium ${
+              <span className={`inline-block mt-1 px-[6px] py-1 text-[10px] rounded font-medium ${
                 user.role === '社長' ? 'bg-purple-100 text-purple-800' :
                 user.role === '常務' ? 'bg-indigo-100 text-indigo-800' :
                 user.role === '部長' ? 'bg-blue-100 text-blue-800' :
@@ -213,26 +213,26 @@ export default function Layout({ children }: LayoutProps) {
           </div>
 
           {/* ナビゲーション */}
-          <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+          <nav className="flex-1 px-[10px] py-[13px] space-y-1 overflow-y-auto">
             {filteredNavigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
                 className={`
-                  flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                  flex items-center justify-between px-[10px] py-[8px] rounded-lg text-[13px] font-medium transition-all duration-200
                   ${isActive(item.href)
-                    ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-700'
+                    ? 'bg-blue-50 text-blue-700 border-l-[3px] border-blue-700'
                     : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                   }
                 `}
               >
                 <div className="flex items-center">
-                  <span className="mr-3">{item.icon}</span>
+                  <span className="mr-[10px]">{item.icon}</span>
                   <span>{item.name}</span>
                 </div>
                 {/* 承認待ちバッジ（承認待ちメニューと工事一覧に表示） */}
                 {(item.name === '承認待ち' || item.name === '工事一覧') && pendingCount > 0 && (
-                  <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                  <span className="inline-flex items-center justify-center px-[6px] py-1 text-[10px] font-bold leading-none text-white bg-red-600 rounded-full">
                     {pendingCount}
                   </span>
                 )}
@@ -241,12 +241,12 @@ export default function Layout({ children }: LayoutProps) {
           </nav>
 
           {/* ログアウトボタン */}
-          <div className="p-4 border-t border-gray-200 bg-gray-50">
+          <div className="p-[13px] border-t border-gray-200 bg-gray-50">
             <button
               onClick={handleLogout}
-              className="flex items-center w-full px-3 py-2 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+              className="flex items-center w-full px-[10px] py-[8px] text-[13px] font-medium text-red-600 rounded-lg hover:bg-red-50 transition-colors"
             >
-              <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 mr-[10px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
               <span>ログアウト</span>
@@ -267,19 +267,19 @@ export default function Layout({ children }: LayoutProps) {
       <div className="flex-1 flex flex-col">
         {/* モバイル用ヘッダー */}
         <header className="md:hidden bg-white shadow">
-          <div className="px-4 h-16 flex items-center">
+          <div className="px-[13px] h-[51px] flex items-center">
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              className="p-[6px] rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
             >
-              <span className="text-xl">☰</span>
+              <span className="text-[16px]">☰</span>
             </button>
-            <h1 className="ml-3 text-lg font-semibold">原価管理システム</h1>
+            <h1 className="ml-[10px] text-[14px] font-semibold">原価管理システム</h1>
           </div>
         </header>
 
         {/* ページコンテンツ */}
-        <main className="flex-1 p-6 md:p-8">
+        <main className="flex-1 p-5 md:p-[26px]">
           {children}
         </main>
       </div>
